@@ -29,7 +29,8 @@ double solver::average_k_runs(int k)
 
 void solver::seed()
 {
-    this->rng.seed();
+    cout << "Seed needs to be predictable (solver.cpp)" << endl;
+    exit(1);
 }
 
 void solver::seed(int seed)
@@ -45,6 +46,7 @@ void solver::read_conf_file(string filename)
         params = nullptr;
     }
     params = new solver_parameters(filename);
+    this->seed(params->get_int("SEED"));
 }
 
 void solver::read_problem(std::string problemType, std::string filename)

@@ -595,7 +595,7 @@ class RandomNumberGenerator{
 
         unsigned long x, y, z;
 
-        RandomNumberGenerator(){x=123456789, y=362436069, z=521288629;seed();}
+        RandomNumberGenerator(){x=123456789, y=362436069, z=521288629;seed(2);}
         ~RandomNumberGenerator(){};
         void seed(void);
         void seed(int seed);

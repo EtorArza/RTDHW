@@ -66,7 +66,7 @@ public:
         d = new cost[dim];         // 'cost-distance' in augmenting path calculation.
         pred = new row[dim];       // row-predecessor of column in augmenting/alternating path.
         rng = new RandomNumberGenerator();
-        rng->seed();
+        rng->seed(2);
     }
 
     ~Lap(){

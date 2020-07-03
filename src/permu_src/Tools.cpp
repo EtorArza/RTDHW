@@ -620,13 +620,8 @@ int RandomNumberGenerator::xorshf96(void)
 
 
 void RandomNumberGenerator::seed(void){
-    struct timespec ts;
-    clock_gettime(CLOCK_REALTIME, &ts);
-    y = 362436069UL;
-    this->z = 521288629UL;
-    int seed =  ts.tv_nsec; // modulus with a big number, but not too big
-    this->x = (unsigned long) seed;
-    xorshf96();
+    cout << "seed(void) called in Tools.cpp" << endl;
+    exit(1);
 }
 
 void RandomNumberGenerator::seed(int seed){
