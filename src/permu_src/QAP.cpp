@@ -175,12 +175,12 @@ double QAP::_Evaluate(int * genes)
 	return -fitness;
 }
 
-	double QAP::fitness_delta_swap(CIndividual *indiv, int i, int j){
+	double QAP::_fitness_delta_swap(CIndividual *indiv, int i, int j){
 		assert(j == i+1);
-		return fitness_delta_interchange(indiv, i, j);
+		return _fitness_delta_interchange(indiv, i, j);
 	}
 
-	double QAP::fitness_delta_interchange(CIndividual *indiv, int i, int j){
+	double QAP::_fitness_delta_interchange(CIndividual *indiv, int i, int j){
 		int new_fitness_delta = 0;
 		int el_at_pos_i_in_sigma_2;
 		if (i > j)
@@ -250,7 +250,7 @@ double QAP::_Evaluate(int * genes)
 		return -new_fitness_delta;
 	}
 
-	double QAP::fitness_delta_insert(CIndividual *indiv, int i, int j){
+	double QAP::_fitness_delta_insert(CIndividual *indiv, int i, int j){
 		InsertAt(indiv->genome, i, j, problem_size_PBP);
 		double res = _Evaluate(indiv->genome);
 		res -= indiv->f_value;

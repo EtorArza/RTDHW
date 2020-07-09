@@ -11,7 +11,6 @@ public:
     double solve();
 
 private:
-    double max_solver_time;
     string ls_operator_name;
 
 };

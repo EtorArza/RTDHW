@@ -73,11 +73,11 @@ public:
 
 	double _Evaluate(int * permu);
 
-	double fitness_delta_swap(CIndividual *indiv, int i, int j){
+	double _fitness_delta_swap(CIndividual *indiv, int i, int j){
 		return fitness_delta_interchange(indiv, i, j);
 	};
 
-	double fitness_delta_interchange(CIndividual *indiv, int i, int j){
+	double _fitness_delta_interchange(CIndividual *indiv, int i, int j){
 		Swap(indiv->genome, i, j);
 		double res = _Evaluate(indiv->genome);
 		res -= indiv->f_value;
@@ -86,7 +86,7 @@ public:
 	};
 
 
-	double fitness_delta_insert(CIndividual *indiv, int i, int j){
+	double _fitness_delta_insert(CIndividual *indiv, int i, int j){
 		InsertAt(indiv->genome, i, j, m_jobs);
 		double res = _Evaluate(indiv->genome);
 		res -= indiv->f_value;

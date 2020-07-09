@@ -1023,6 +1023,9 @@ vector<string> split_string(string str, string token);
 
 std::string system_exec(const char* cmd);
 
+std::string system_exec(std::string cmd);
+
+
 // get runtime of job in hipatia to get around the suspension mechanism during training
 double get_runtime_hipatia();
 

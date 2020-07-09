@@ -1,4 +1,6 @@
 #include "iterated_local_search.h"
+#include "solver.h"
+#include "PBP.h"
 #include "Tabu.h"
 #include "Individual.h"
 #include "permuevaluator.h"
@@ -22,7 +24,6 @@ double iterated_local_search::solve()
         ls_operator = PERMU::SWAP;
     }
 
-    max_solver_time = this->params->get_double("MAX_SOLVER_TIME");
     read_problem(this->params->get_string("PROBLEM_TYPE"), this->params->get_string("PROBLEM_PATH"));
 
     
@@ -75,7 +76,7 @@ double iterated_local_search::solve()
     }
     
 
-    while (timer->toc() < max_solver_time)
+    while (timer->toc() < params->max_time && problem->n_evals < params->max_evals)
     {
         if (indiv.is_local_optimum[ls_operator])
         {

@@ -71,9 +71,9 @@ public:
 
 
 
-	double fitness_delta_swap(CIndividual *indiv, int i, int j);
-	double fitness_delta_interchange(CIndividual *indiv, int i, int j);
-	double fitness_delta_insert(CIndividual *indiv, int i, int j);
+	double _fitness_delta_swap(CIndividual *indiv, int i, int j);
+	double _fitness_delta_interchange(CIndividual *indiv, int i, int j);
+	double _fitness_delta_insert(CIndividual *indiv, int i, int j);
 
 protected:	
     double _Evaluate(int *permu);

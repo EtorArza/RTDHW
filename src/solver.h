@@ -12,11 +12,10 @@ class solver
 
 protected:
     RandomNumberGenerator rng;
-    PERMU::PBP* problem;
     stopwatch* timer;
 
 public:
-
+    PERMU::PBP* problem;
     solver();
     virtual ~solver();
     solver_parameters* params;
@@ -41,6 +40,8 @@ class solver_parameters
         double get_double(string param_name);
         string get_string(string param_name);
         bool get_bool(string param_name);
+        int max_evals;
+        double max_time;
     
     private:
         void print_solver_parameter_read_error(string param_name);

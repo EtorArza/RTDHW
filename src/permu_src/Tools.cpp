@@ -2201,6 +2201,13 @@ vector<string> split_string(string str, string token){
     return result;
 }
 
+
+std::string system_exec(std::string cmd)
+{
+    return system_exec(cmd.c_str());
+}
+
+
 std::string system_exec(const char* cmd) {
     std::array<char, 128> buffer;
     std::string result;

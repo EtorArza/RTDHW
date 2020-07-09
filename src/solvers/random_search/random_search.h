@@ -1,13 +1,13 @@
 #pragma once
 #include "solver.h"
 #include <string.h>
-class variable_neighborhood_search : public solver
+class random_search : public solver
 {
 
 
 public:
-    variable_neighborhood_search(){};
-    ~variable_neighborhood_search(){};
+    random_search(){};
+    ~random_search(){};
     double solve();
 
 private:

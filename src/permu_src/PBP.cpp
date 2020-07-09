@@ -57,10 +57,12 @@ void PBP::initialize_variables_PBP(int problem_size)
     _random_permu3 = new int[problem_size];
     GenerateRandomPermutation(_random_permu3, problem_size,rng);
     problem_size_PBP = problem_size;
+    n_evals = 0;
 }
 
 void PBP::Evaluate(CIndividual *indiv)
 {
+    n_evals++;
 	double fitness = 0;
 	fitness = _Evaluate(indiv->genome);
 	indiv->f_value = fitness;
@@ -68,6 +70,7 @@ void PBP::Evaluate(CIndividual *indiv)
 
 double PBP::Evaluate(int *genome)
 {
+    n_evals++;
 	return _Evaluate(genome);
 }
 
@@ -704,4 +707,28 @@ void PBP::move_indiv_away_reference(CIndividual* indiv, int* ref_permu, PERMU::o
 
 }
 
-}
+
+
+	double PBP::fitness_delta_swap(CIndividual *indiv, int i, int j)
+    {
+        int current_n_evals = n_evals;
+        double res = _fitness_delta_swap(indiv, i, j);
+        n_evals = current_n_evals + 1;
+        return res;
+    }
+	double PBP::fitness_delta_interchange(CIndividual *indiv, int i, int j)
+    {
+        int current_n_evals = n_evals;
+        double res = _fitness_delta_interchange(indiv, i, j);
+        n_evals = current_n_evals + 1;
+        return res;
+    }
+	double PBP::fitness_delta_insert(CIndividual *indiv, int i, int j)
+    {
+        int current_n_evals = n_evals;
+        double res = _fitness_delta_insert(indiv, i, j);
+        n_evals = current_n_evals + 1;
+        return res;
+    }
+
+} // namespace PERMU;

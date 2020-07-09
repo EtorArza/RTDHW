@@ -35,7 +35,7 @@ class PBP
 	virtual ~PBP();
 	virtual int Read(string filename) = 0;
 	virtual int GetProblemSize() = 0;
-
+	int n_evals;
 
 	/*
 	 * Functions that are valid for all permutation problems. 
@@ -76,10 +76,12 @@ class PBP
 	*/
 	// The f_value of the individuals does not change in this functions. Just return the delta.
 	virtual double _Evaluate(int * permu) = 0;
-	virtual double fitness_delta_swap(CIndividual *indiv, int i, int j) = 0;
-	virtual double fitness_delta_interchange(CIndividual *indiv, int i, int j) = 0;
-	virtual double fitness_delta_insert(CIndividual *indiv, int i, int j) = 0;
-
+	virtual double _fitness_delta_swap(CIndividual *indiv, int i, int j) = 0;
+	virtual double _fitness_delta_interchange(CIndividual *indiv, int i, int j) = 0;
+	virtual double _fitness_delta_insert(CIndividual *indiv, int i, int j) = 0;
+	double fitness_delta_swap(CIndividual *indiv, int i, int j);
+	double fitness_delta_interchange(CIndividual *indiv, int i, int j);
+	double fitness_delta_insert(CIndividual *indiv, int i, int j);
 
   private:
 	void obtain_indexes_step_towards(int *permu, int *ref_permu, int* i, int* j, PERMU::operator_t operator_id);

@@ -59,6 +59,8 @@ solver_parameters::solver_parameters(string filename)
     param_filename = filename;
     reader = INIReader(filename);
     solver_name = get_string("SOLVER_NAME");
+    max_evals = get_int("MAX_SOLVER_EVALS");
+    max_time = get_double("MAX_SOLVER_TIME");
 }
 
 solver_parameters::~solver_parameters(){}
