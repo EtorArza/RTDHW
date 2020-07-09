@@ -7,7 +7,7 @@ if [[ "$#" -ne 1  ]] ; then
     exit 1
 fi
 
-
+cpu_name=$1
 
 sudo apt install -y g++
 sudo apt install -y make
@@ -29,7 +29,7 @@ progressbar()
 }
 
 echo -n "initialization...  "
-./main.out initial_execution.ini initialization.txt $1
+./main.out initial_execution.ini initialization.txt $cpu_name
 echo initialized.
 
 i=0
@@ -69,7 +69,7 @@ STEPS_TO_MOVE_TOWARDS_RANDOM = 0
 SEED = 2
 EOF
 
-./main.out tmp.ini result.txt $1
+./main.out tmp.ini result.txt $cpu_name
 
 done
 done

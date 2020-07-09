@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 34)
+    if (argc != 4)
     {
         std::cout << "execute only with three parameters: the conf file path to use, the result file name and the anme of the machine." << std::endl;
         exit(1);
