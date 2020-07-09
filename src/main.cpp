@@ -5,9 +5,9 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3)
+    if (argc != 34)
     {
-        std::cout << "execute only with two parameters: the conf file path to use and the result file name." << std::endl;
+        std::cout << "execute only with three parameters: the conf file path to use, the result file name and the anme of the machine." << std::endl;
         exit(1);
     }
     solver *param_sol;
@@ -58,7 +58,7 @@ for (int i = 0; i < N_EVALS; i++)
     }
     res /= (double)N_EVALS;
 
-    string cpu_name = system_exec("less /proc/cpuinfo | grep 'model name' | head -n 1 | awk -v FS=\"(:|)\" '{print $2}' | tr -d '\n'");
+    //string cpu_name = system_exec("less /proc/cpuinfo | grep 'model name' | head -n 1 | awk -v FS=\"(:|)\" '{print $2}' | tr -d '\n'");
 
     string problem_type = system_exec(std::string() + "cat " + argv[1] + " | grep \"PROBLEM_TYPE\" |  awk -v FS=\"(=|;)\" '{print $2}' | tr -d ' \n'");
     string problem_path = system_exec(std::string() + "cat " + argv[1] + " | grep \"PROBLEM_PATH\" |  awk -v FS=\"(=|;)\" '{print $2}' | tr -d ' \n'");
@@ -67,7 +67,7 @@ for (int i = 0; i < N_EVALS; i++)
      
 
     string res_str = 
-    cpu_name + "|" + 
+    std::string() + argv[3] + "|" + 
     problem_type + "|" + 
     problem_path + "|" + 
     solver_name_str + "|" + 

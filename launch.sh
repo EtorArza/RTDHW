@@ -1,3 +1,14 @@
+if [[ "$#" -ne 1  ]] ; then
+    echo 'Please provide the name of the machine in which it is executed. Example: '
+    echo ""
+    echo 'launch.sh inteli5_2400'
+    echo ""
+    echo 'Exitting...'
+    exit 1
+fi
+
+
+
 sudo apt install -y g++
 sudo apt install -y make
 
@@ -18,7 +29,7 @@ progressbar()
 }
 
 echo -n "initialization...  "
-./main.out initial_execution.ini initialization.txt
+./main.out initial_execution.ini initialization.txt $1
 echo initialized.
 
 i=0
@@ -58,7 +69,7 @@ STEPS_TO_MOVE_TOWARDS_RANDOM = 0
 SEED = 2
 EOF
 
-./main.out tmp.ini result.txt
+./main.out tmp.ini result.txt $1
 
 done
 done
