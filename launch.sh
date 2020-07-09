@@ -7,6 +7,10 @@ if [[ "$#" -ne 1  ]] ; then
     exit 1
 fi
 
+git config --global user.email "etorarza@gmail.com"
+git config --global user.name "EtorArza"
+
+
 cpu_name=$1
 
 sudo apt install -y g++

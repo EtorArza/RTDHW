@@ -5,3 +5,4 @@ obj/*
 copy_files_to_hipatia.sh
 .vscode
 initialization.txt
+tmp.ini
