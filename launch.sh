@@ -1,8 +1,8 @@
-# sudo apt install -y g++
-# sudo apt install -y make
+sudo apt install -y g++
+sudo apt install -y make
 
-# make clean
-# make
+make clean
+make
 
 progressbar()
 {
