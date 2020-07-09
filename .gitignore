@@ -2,7 +2,6 @@ obj/*
 *.o
 *.d
 *.out
-result.txt
 copy_files_to_hipatia.sh
 .vscode
 initialization.txt
