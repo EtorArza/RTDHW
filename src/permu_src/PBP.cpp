@@ -711,24 +711,26 @@ void PBP::move_indiv_away_reference(CIndividual* indiv, int* ref_permu, PERMU::o
 
 	double PBP::fitness_delta_swap(CIndividual *indiv, int i, int j)
     {
-        int current_n_evals = n_evals;
-        double res = _fitness_delta_swap(indiv, i, j);
-        n_evals = current_n_evals + 1;
-        return res;
+        return fitness_delta_interchange(indiv, i, j);
     }
 	double PBP::fitness_delta_interchange(CIndividual *indiv, int i, int j)
     {
         int current_n_evals = n_evals;
-        double res = _fitness_delta_interchange(indiv, i, j);
-        n_evals = current_n_evals + 1;
-        return res;
-    }
-	double PBP::fitness_delta_insert(CIndividual *indiv, int i, int j)
-    {
-        int current_n_evals = n_evals;
-        double res = _fitness_delta_insert(indiv, i, j);
+		Swap(indiv->genome, i, j);
+		double res = _Evaluate(indiv->genome);
+		res -= indiv->f_value;
+		Swap(indiv->genome, i, j);
         n_evals = current_n_evals + 1;
         return res;
     }
 
+	double PBP::fitness_delta_insert(CIndividual *indiv, int i, int j){
+        int current_n_evals = n_evals;
+		InsertAt(indiv->genome, i, j, problem_size_PBP);
+		double res = _Evaluate(indiv->genome);
+		res -= indiv->f_value;
+		InsertAt(indiv->genome, j, i, problem_size_PBP);
+        n_evals = current_n_evals + 1;
+		return res;
+	}
 } // namespace PERMU;

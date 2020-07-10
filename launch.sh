@@ -43,7 +43,7 @@ for OPERATOR in "swap" "exchange" "insert" "random_search"; do
 
 i=$(($i+1))
 
-progressbar $i 160
+progressbar $i 64
 
 
 if [[ "$OPERATOR" == "random_search" ]]; then
@@ -60,7 +60,7 @@ SOLVER_NAME = $SOLVER_NAME
 OPERATOR = $OPERATOR
 USE_TABU = true
 MAX_SOLVER_TIME = 99999999.9
-MAX_SOLVER_EVALS = 60000000
+MAX_SOLVER_EVALS = 2000000
 TABU_LENGTH = 40
 N_EVALS = 1
 N_OF_THREADS = 1
