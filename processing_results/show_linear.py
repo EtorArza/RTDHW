@@ -21,6 +21,10 @@ sub_df_1 = df[(df["operatorname"]=="random_search") & (df["problempath"]=="insta
 sub_df_2 = df[(df["operatorname"]=="insert") & (df["problempath"]=="instances/pfsp/tai200_20_0.pfsp")].reset_index(drop=True)
 sub_df_3 = df[(df["operatorname"]=="swap") & (df["problempath"]=="instances/lop/N-t65d11xx_150.lop")].reset_index(drop=True)
 
+sub_df_0 = df[(df["operatorname"]=="random_search") & (df["problempath"]=="instances/qap/tai100a.qap")].reset_index(drop=True)
+sub_df_1 = df[(df["operatorname"]=="random_search") & (df["problempath"]=="instances/tsp/kroB200.tsp")].reset_index(drop=True)
+sub_df_2 = df[(df["operatorname"]=="random_search") & (df["problempath"]=="instances/pfsp/tai200_20_0.pfsp")].reset_index(drop=True)
+sub_df_3 = df[(df["operatorname"]=="random_search") & (df["problempath"]=="instances/lop/N-t65d11xx_150.lop")].reset_index(drop=True)
 
 list_of_subdf = [sub_df_0, sub_df_1, sub_df_2, sub_df_3]
 
