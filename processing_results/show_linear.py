@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from tqdm import tqdm as tqdm
 from statistics import mean,median
-
+from matplotlib.ticker import PercentFormatter
 from matplotlib import rc
 
 
@@ -39,6 +39,158 @@ cpu_passmark_single_thread_scores = {
     'i7_7500U_2_7gh':2025,
     'amd_fx_6300_hexacore':1484
 }
+
+
+
+
+
+
+
+
+################# PLOT Confidence intervals of constant k #################
+
+# We say that the proportion between two tasks is constant, lets say it is k. 
+# The confidence interva is defined as k * (1 - c interval perc) < x < k *(1 + c_interval perc)
+# Since k is estimated as an average obtained in all cpus, this function returns the number of times that the actual constant k is within these two values.
+def what_percentage_corresponds_to_the_c_inteval(df, c_interval_perc):
+    tasks = df["taskname"].unique()
+
+    cases_within_interval = 0
+    cases_outside_interval = 0
+
+    for i, task_i in enumerate(tasks):
+        for j, task_j in enumerate(tasks):
+            if i > j:
+                continue
+            sub_df_0 = df[df["taskname"]==task_i].reset_index(drop=True)
+            sub_df_1 = df[df["taskname"]==task_j].reset_index(drop=True)
+            res_df = sub_df_0["time"]/sub_df_1["time"]
+            upper_bound = res_df.mean() * (1 + c_interval_perc)
+            lower_bound = res_df.mean() * (1 - c_interval_perc)
+
+            for k in res_df:
+                if lower_bound < k < upper_bound:
+                    cases_within_interval+=1
+                else:
+                    cases_outside_interval+=1
+    return float(cases_within_interval) / (cases_outside_interval + cases_within_interval)
+
+
+def get_all_k_constants(df):
+    tasks = df["taskname"].unique()
+
+    cases_within_interval = 0
+    cases_outside_interval = 0
+
+    k_values = []
+
+    for i, task_i in enumerate(tasks):
+        for j, task_j in enumerate(tasks):
+            if i <= j:
+                continue
+            sub_df_0 = df[df["taskname"]==task_i].reset_index(drop=True)
+            sub_df_1 = df[df["taskname"]==task_j].reset_index(drop=True)
+            res_df = sub_df_0["time"]/sub_df_1["time"]
+
+
+            for k in res_df / res_df.mean():
+                k_values.append(k)
+    return np.array(k_values)
+
+
+
+print("$$$$ correlation $$$$$$$$$$$$")
+
+
+
+
+
+tasks = df["taskname"].unique()
+sorted_df = df.sort_values(by='cpuname', inplace=False, axis = 0)
+machines_in_cols_and_tasks_in_rows = []
+
+for task in tasks:
+    machines_in_cols_and_tasks_in_rows.append(df[df["taskname"] == task]["time"].to_list())
+
+machines_in_cols_and_tasks_in_rows = pd.DataFrame(machines_in_cols_and_tasks_in_rows)
+
+print(machines_in_cols_and_tasks_in_rows.corr(method="pearson"))
+print(machines_in_cols_and_tasks_in_rows.corr(method="spearman"))
+print(machines_in_cols_and_tasks_in_rows.corr(method="kendall"))
+
+exit(1)
+
+###########################################33
+
+
+print("$$$$ HISTOGRAM k $$$$$$$$$$$$")
+
+
+k_values = get_all_k_constants(df)
+N = 10
+delta = 0.05
+bins=sorted([(1-delta)**n for n in range(1,N)])+[1]+sorted([(1+delta)**n for n in range(1,N)])
+k_values_clipped = np.clip(k_values, bins[0], bins[-1])
+plt.hist(k_values_clipped, bins=bins,edgecolor='black', linewidth=1.2,  weights=np.ones(len(k_values_clipped)) / len(k_values_clipped))
+plt.xscale("log")
+n_ticks = 6
+xticks = [(bins[1]+bins[0])/2]+[bins[int((i * len(bins))//n_ticks)] for i in range(1,n_ticks)]+[(bins[-1]+bins[-2])/2]
+
+labels = ["< "+str(round(bins[0],2))]+["{:.2f}".format(item) for item in xticks[1:-1]]+ ["> "+str(round(bins[-1],2))]
+
+
+for percentage in [0.2, 0.5]:
+    print(len(k_values[(k_values < 1.0+percentage) & (k_values > 1-percentage)])/len(k_values),"percent of the cases are within", percentage , "of the average" )
+
+plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
+plt.xticks(xticks, labels=labels)
+plt.xlabel(r"percentual deviation: $r_j(A,B) \ / \ \bar{r}(A,B$)", fontsize=14)
+plt.ylabel("percentage of cases")
+plt.tight_layout()
+plt.savefig("../../paper/images/histogram_k.pdf")
+plt.close()
+
+
+print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
+
+
+
+y_vec = [0.354, 0.287, 0.173, 0.073]
+x_vec = [1.0 - what_percentage_corresponds_to_the_c_inteval(df, item) for item in tqdm(y_vec)]
+target_x = [0.05, 0.1, 0.2, 0.5]
+
+print("##################################################")
+print("These two vectors below should be equal. Change y_vec so that they are.")
+print(x_vec)
+print(target_x)
+print("##################################################")
+
+for i in range(len(y_vec)):
+    x = i
+    y = y_vec[i]
+
+    plt.plot([x, x, x], [1.0-y ,1.0, 1.0+y], color="black")
+    plt.scatter([x, x], [1.0-y, 1.0+y], marker="_", color="black")
+
+plt.yticks([0.0, 1.0, 2.0], labels=["0","r","2r"])
+plt.xticks([float(i) for i in range(len(y_vec))], labels=["$"+str(item)+"$" for item in target_x])
+#plt.xscale("log")
+plt.xlabel("Error of the confidence interval")
+plt.ylabel("Size of the confidence interval")
+plt.tight_layout()
+plt.savefig("../../paper/images/ci_of_constant_ratio_k.pdf")
+
+plt.close()
+
+
+
+
+#########################################################################
+
+
+
+
 
 
 
@@ -97,7 +249,7 @@ plt.plot([min(x_vec)*0.6, max(x_vec)*1.1], fit_and_predict(df, [min(x_vec)*0.6, 
 
 plt.legend()
 plt.xlabel("Passmark single thread score, $x$")
-plt.ylabel("Time, $t(x)$")
+plt.ylabel("Time, $t(A_0)$")
 
 plt.tight_layout()
 plt.savefig("../../paper/images/passmark_base_algorithm_regression.pdf")
@@ -177,79 +329,21 @@ for CC in tqdm(CORRECTION_COEFFICIENTS):
     perc_cases_pred_lower_list.append(perc_cases_pred_lower)
     pred_time_in_average_this_percent_lower_than_actual_list.append(pred_time_in_average_this_percent_lower_than_actual)
 
+perc_cases_pred_higher_list = 1 - np.array(perc_cases_pred_lower_list)
+
 print("The correction coefficients:",CORRECTION_COEFFICIENTS)
-print("Percentage of cases in which pred was lower:", perc_cases_pred_lower_list)
+print("Percentage of cases in which pred was higher:", perc_cases_pred_higher_list)
 print("On average, the predicted time was this much percent lower",pred_time_in_average_this_percent_lower_than_actual_list)
-plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_lower_list, label=r"probability$(\hat{t}_2(A) < t_2(A))$",linestyle="-")
-plt.plot(CORRECTION_COEFFICIENTS, pred_time_in_average_this_percent_lower_than_actual_list, label=r"mean$(\dfrac{\hat{t}_2(A)}{t_2(A)})$",linestyle="--")
+plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_higher_list, label=r"$P(\hat{t}_2(B) > t_2(B))$",linestyle="-")
+plt.plot(CORRECTION_COEFFICIENTS, pred_time_in_average_this_percent_lower_than_actual_list, label=r"$\mathbb{E}(\dfrac{\hat{t}_2(B)}{t_2(B)})$",linestyle="--")
 
 plt.legend()
-plt.ylabel("percentage")
+plt.ylabel("")
 plt.xlabel("correction parameter  $\gamma$")
 plt.ylim((0,1.05))
 plt.tight_layout()
 plt.savefig("../../paper/images/correction_coefficient_tradeoff.pdf")
 plt.close()
-
-
-################# PLOT Confidence intervals of constant k #################
-
-# We say that the proportion between two tasks is constant, lets say it is k. 
-# The confidence interva is defined as k * (1 - c interval perc) < x < k *(1 + c_interval perc)
-# Since k is estimated as an average obtained in all cpus, this function returns the number of times that the actual constant k is within these two values.
-def what_percentage_corresponds_to_the_c_inteval(df, c_interval_perc):
-    tasks = df["taskname"].unique()
-
-    cases_within_interval = 0
-    cases_outside_interval = 0
-
-    for i, task_i in enumerate(tasks):
-        for j, task_j in enumerate(tasks):
-            if i > j:
-                continue
-            sub_df_0 = df[df["taskname"]==task_i].reset_index(drop=True)
-            sub_df_1 = df[df["taskname"]==task_j].reset_index(drop=True)
-            res_df = sub_df_0["time"]/sub_df_1["time"]
-            upper_bound = res_df.mean() * (1 + c_interval_perc)
-            lower_bound = res_df.mean() * (1 - c_interval_perc)
-
-            for k in res_df:
-                if lower_bound < k < upper_bound:
-                    cases_within_interval+=1
-                else:
-                    cases_outside_interval+=1
-    return float(cases_within_interval) / (cases_outside_interval + cases_within_interval)
-
-
-
-y_vec = [0.354, 0.287, 0.173, 0.073]
-x_vec = [1.0 - what_percentage_corresponds_to_the_c_inteval(df, item) for item in tqdm(y_vec)]
-target_x = [0.05, 0.1, 0.2, 0.5]
-
-print("##################################################")
-print("These two vectors below should be equal. Change y_vec so that they are.")
-print(x_vec)
-print(target_x)
-print("##################################################")
-
-for i in range(len(y_vec)):
-    x = i
-    y = y_vec[i]
-
-    plt.plot([x, x, x], [1.0-y ,1.0, 1.0+y], color="black")
-    plt.scatter([x, x], [1.0-y, 1.0+y], marker="_", color="black")
-
-plt.yticks([0.0, 1.0, 2.0], labels=["0","k","2k"])
-plt.xticks([float(i) for i in range(len(y_vec))], labels=["$"+str(item)+"$" for item in target_x])
-#plt.xscale("log")
-plt.xlabel("Error of the confidence interval")
-plt.ylabel("Size of the confidence interval")
-plt.tight_layout()
-plt.savefig("../../paper/images/ci_of_constant_ratio_k.pdf")
-
-plt.close()
-
-
 
 
 
