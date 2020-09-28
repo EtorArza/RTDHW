@@ -97,7 +97,7 @@ y = percentage_of_rejects
 print(np.stack((x,y)))
 
 
-plt.plot(x,y)
+plt.plot(x,y,marker="o")
 plt.xticks(x, labels=x_labels)
 plt.xlabel("Percentage of extra execution time")
 plt.ylabel("Probability of type I error")
