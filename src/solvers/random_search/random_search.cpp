@@ -50,7 +50,7 @@ double random_search::solve()
 
 
 
-    while (timer->toc() < params->max_time && problem->n_evals < params->max_evals)
+    while (timer->toc() < params->max_time && (problem->n_evals < params->max_evals || params->max_evals < 0))
     {
         GenerateRandomPermutation(indiv.genome, problem->GetProblemSize(), &rng);
         problem->Evaluate(&indiv);

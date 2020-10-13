@@ -74,9 +74,8 @@ double iterated_local_search::solve()
         cout << "Error, reset method not recognized." << endl;
         exit(1);
     }
-    
 
-    while (timer->toc() < params->max_time && problem->n_evals < params->max_evals)
+    while (timer->toc() < params->max_time && (problem->n_evals < params->max_evals || params->max_evals < 0))
     {
         if (indiv.is_local_optimum[ls_operator])
         {
