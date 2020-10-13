@@ -164,19 +164,22 @@ for metric, title in zip(["pearson", "spearman", "kendall"], ["Pearson's correla
 print("explaining graph on prediction of equivalent time")
 
 
-t_1_A, t_2_A = 0.4, 1.5
-t_1_B, t_2_B = 1, 3
 
-x_lims = (0, 1.5)
+t_1_B, t_2_B = 1, 2.75
+t_1_A, t_2_A = 0.5, 1.5
+t_1_C, t_2_C = t_1_A, t_2_A
+t_1_D, t_2_D = 1.5, 3.5
+
+
+
+x_lims = (0, 2.3)
 y_lims = (0, 4.5)
 
 
-def fx_actual(x): return (t_2_B - t_2_A)/(t_1_B - t_1_A)*x + \
-    t_2_A - ((t_2_B - t_2_A)/(t_1_B - t_1_A)*t_1_A)
+def fx_actual(x): return (t_2_D - t_2_A)/(t_1_D - t_1_A)*x + t_2_A - ((t_2_D - t_2_A)/(t_1_D - t_1_A)*t_1_A)
 
 
-def fx_predicted(x): return (0 - t_2_A)/(0 - t_1_A)*x + \
-    t_2_A - ((0 - t_2_A)/(0 - t_1_A)*t_1_A)
+def fx_predicted(x): return (0 - t_2_A)/(0 - t_1_A)*x + t_2_A - ((0 - t_2_A)/(0 - t_1_A)*t_1_A)
 
 
 delta = 0.05
@@ -195,33 +198,47 @@ plt.ylim(y_lims)
 
 
 # draw interpolation
-#plt.plot([*x_lims], list(map(fx_actual, [*x_lims])), linestyle="--", linewidth=1.0, c="tab:green", label="")
-plt.plot([*x_lims], list(map(fx_predicted, [*x_lims])), linestyle="--",
-         linewidth=1.0, c="tab:blue", label="afine prediction")
+plt.plot([*x_lims], list(map(fx_actual, [*x_lims])), linestyle="--", linewidth=1.0, c="tab:orange", label="Prediction with two reference tasks")
+plt.plot([*x_lims], list(map(fx_predicted, [*x_lims])), linestyle="-.",
+         linewidth=1.0, c="tab:blue", label="Prediction with one reference task")
 
 
 # draw points and add text
-plt.scatter(t_1_A, t_2_A, marker="x", c="tab:red")
-plt.text(t_1_A+delta, t_2_A+delta, "task $A$")
+plt.scatter(t_1_A, t_2_A, marker="x", c="tab:red", label="Runtime of tasks")
+plt.text(t_1_A+delta, t_2_A+delta, "task $C$")
+plt.scatter(t_1_D, t_2_D, marker="x", c="tab:red")
+plt.text(t_1_D+delta, t_2_D+delta, "task $D$")
 plt.scatter(t_1_B, t_2_B, marker="x", c="tab:red")
 plt.text(t_1_B+delta, t_2_B+delta, "task $B$")
-plt.scatter(t_1_B, fx_predicted(t_1_B), marker=".",
-            c="tab:green", linewidths=0.75)
-plt.text(0.2, fx_predicted(t_1_B)+delta,
-         "predicted runtime of \ntask $B$ in machine $P_2$")
+plt.scatter(t_1_B, fx_predicted(t_1_B), marker="s", c="tab:blue",
+            linewidths=2.0, label="Predicted runtime of task B in machine\n $P_2$ with one reference task")
+plt.scatter(t_1_B, fx_actual(t_1_B), marker=".", c="tab:orange",
+            linewidths=3.75, label="Predicted runtime of task B in machine\n $P_2$ with two reference tasks")
+
+# plt.scatter(t_1_B, fx_predicted(t_1_B), marker=".", c="tab:blue", linewidths=0.30)
+# plt.scatter(t_1_B, fx_actual(t_1_B), marker=".", c="tab:orange", linewidths=0.30)
+# plt.text(0.2, fx_predicted(t_1_B)+delta, "predicted runtime of task $B$ in machine $P_2$")
 
 # add grid to points
 draw_grid_on_point(t_1_A, t_2_A)
-draw_grid_on_point(t_1_B, t_2_B)
+#draw_grid_on_point(t_1_B, t_2_B)
+draw_grid_on_point(t_1_D, t_2_D)
 draw_grid_on_point(t_1_B, fx_predicted(t_1_B))
+draw_grid_on_point(t_1_B, fx_actual(t_1_B))
 
 
 # labels on tics
-plt.xticks([0, t_1_A, t_1_B], labels=["0", r"$t_1(A)$", r"$t_1(B)$"])
-plt.yticks([t_2_A, t_2_B, fx_predicted(t_1_B)], labels=[
-           r"$t_2(A)$", r"$t_2(B)$", r"$\hat{t}_2(B)$"])
+plt.xticks([0, t_1_A, t_1_B, t_1_D], labels=["0", r" $t_1(C)$", r"$t_1(B)$", r"$t_1(D)$"])
+plt.yticks([t_2_A, fx_actual(t_1_B), t_2_B, fx_predicted(t_1_B), t_2_D], labels=[
+           r"  $t_2(C)$",  r"  ", r"  $t_2(B)$", r"  ", r"  $t_2(D)$", ])
 
 
+# labels on axes
+plt.xlabel("Runtimes in machine $P_1$")
+plt.ylabel("Runtimes in machine $P_2$")
+
+plt.legend()
+plt.legend(loc=4, prop={'size': 9})
 plt.tight_layout()
 plt.savefig("../../paper/images/explaination_prediction.pdf")
 plt.close()
@@ -354,8 +371,8 @@ plt.plot([min(x_vec)*0.6, max(x_vec)*1.1], fit_and_predict(df, [min(x_vec)*0.6, 
 
 
 plt.legend()
-plt.xlabel("Passmark single thread score, $x$")
-plt.ylabel("Time, $t(A_0)$")
+plt.xlabel("Machine score, $x$")
+plt.ylabel("Time, $t(G)$")
 
 plt.tight_layout()
 plt.savefig("../../paper/images/passmark_base_algorithm_regression.pdf")
@@ -448,7 +465,7 @@ print("On average, the predicted time was this much percent lower",
 plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_higher_list,
          label=r"$P(\hat{t}_2(B) > t_2(B))$", linestyle="-")
 plt.plot(CORRECTION_COEFFICIENTS, pred_time_in_average_this_percent_lower_than_actual_list,
-         label=r"$\mathbb{E}(\dfrac{\hat{t}_2(B)}{t_2(B)})$", linestyle="--")
+         label=r"$\mathbb{E}[\dfrac{\hat{t}_2(B)}{t_2(B)}]$", linestyle="--")
 
 plt.legend()
 plt.ylabel("")
