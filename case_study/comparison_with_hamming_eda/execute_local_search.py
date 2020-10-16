@@ -2,9 +2,10 @@ import subprocess
 import pandas as pd
 
 
-res_file = "case_study/comparison_with_memetic_search/res_memetic.csv"
-instances_dir = "case_study/comparison_with_memetic_search/instances/"
-csv_path = "case_study/comparison_with_memetic_search/stopping_criterion.csv"
+
+res_file = "case_study/comparison_with_hamming_eda/res_EDA.csv"
+instances_dir = "case_study/comparison_with_hamming_eda/instances/"
+csv_path = "case_study/comparison_with_hamming_eda/stopping_criterion.csv"
 
 
 def write_conf_file(PROBLEM_PATH, MAX_SOLVER_TIME):
@@ -17,7 +18,7 @@ OPERATOR = exchange
 USE_TABU = false
 MAX_SOLVER_TIME = {MAX_SOLVER_TIME}
 MAX_SOLVER_EVALS = -1
-N_EVALS = 10
+N_EVALS = 20
 N_OF_THREADS = 1
 
 PROBLEM_TYPE = qap
