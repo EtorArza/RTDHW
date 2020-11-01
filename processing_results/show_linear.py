@@ -9,24 +9,20 @@ import seaborn as sns
 
 
 columns = ["cpuname", "problemtype", "problempath", "methodname", "operatorname", "nevals",
-           "maxtime", "maxevals", "time", "evals", "fitness", "taskname", "normalizedtime"]
+           "maxtime", "maxevals", "time", "evals", "fitness", "taskname"]
 
 lines = []
-with open("../result.txt", "r") as f:
+with open("result.txt", "r") as f:
     for line in f:
         line = line.strip()
         line = line.split("|")
         line = line[0:5] + [int(line[5])] + [float(line[6])] + [int(line[7])] + [float(line[8])] + [
-            int(line[9])] + [float(line[10])] + [line[2].split("/")[-1] + "_" + line[4]] + [0.0]
+            int(line[9])] + [float(line[10])] + [line[2].split("/")[-1] + "_" + line[4]]
 
         lines.append(line)
 
 df = pd.DataFrame(lines, columns=columns)
 
-for taskname in df["taskname"].unique():
-    norm_times = df[df["taskname"] == taskname]["time"] / \
-        df[df["taskname"] == taskname]["time"].mean()
-    df["normalizedtime"][norm_times.index] = norm_times
 
 ######################### REGRESION PLOT #########################
 
@@ -153,7 +149,7 @@ for metric, title in zip(["pearson", "spearman", "kendall"], ["Pearson's correla
     plt.ylabel("machine index")
     plt.title(title)
     plt.tight_layout()
-    axes.figure.savefig("../../paper/images/" + metric + ".pdf")
+    axes.figure.savefig("../paper/images/" + metric + ".pdf")
     plt.close()
 
 # hmap.figure.savefig("Correlation_Heatmap_Lower_Triangle_with_Seaborn_using_mask.png",
@@ -198,22 +194,22 @@ plt.ylim(y_lims)
 
 
 # draw interpolation
-plt.plot([*x_lims], list(map(fx_actual, [*x_lims])), linestyle="--", linewidth=1.0, c="tab:orange", label="Prediction with two reference tasks")
+plt.plot([*x_lims], list(map(fx_actual, [*x_lims])), linestyle="--", linewidth=1.0, c="tab:orange", label="Prediction with two references")
 plt.plot([*x_lims], list(map(fx_predicted, [*x_lims])), linestyle="-.",
-         linewidth=1.0, c="tab:blue", label="Prediction with one reference task")
+         linewidth=1.0, c="tab:blue", label="Prediction with one reference")
 
 
 # draw points and add text
 plt.scatter(t_1_A, t_2_A, marker="x", c="tab:red", label="Runtime of tasks")
-plt.text(t_1_A+delta, t_2_A+delta, "task $C$")
+plt.text(t_1_A+delta, t_2_A+delta, "  $s'$")
 plt.scatter(t_1_D, t_2_D, marker="x", c="tab:red")
-plt.text(t_1_D+delta, t_2_D+delta, "task $D$")
+plt.text(t_1_D+delta, t_2_D+delta, "  $s''$")
 plt.scatter(t_1_B, t_2_B, marker="x", c="tab:red")
-plt.text(t_1_B+delta, t_2_B+delta, "task $B$")
+plt.text(t_1_B+delta, t_2_B+delta, "  $s$")
 plt.scatter(t_1_B, fx_predicted(t_1_B), marker="s", c="tab:blue",
-            linewidths=2.0, label="Predicted runtime of task B in machine\n $P_2$ with one reference task")
+            linewidths=2.0, label="Predicted runtime of the runtime of $s$ in machine\n $P_2$ with one reference")
 plt.scatter(t_1_B, fx_actual(t_1_B), marker=".", c="tab:orange",
-            linewidths=3.75, label="Predicted runtime of task B in machine\n $P_2$ with two reference tasks")
+            linewidths=3.75, label="Predicted runtime of the runtime of $s$ in machine\n $P_2$ with two references")
 
 # plt.scatter(t_1_B, fx_predicted(t_1_B), marker=".", c="tab:blue", linewidths=0.30)
 # plt.scatter(t_1_B, fx_actual(t_1_B), marker=".", c="tab:orange", linewidths=0.30)
@@ -228,9 +224,9 @@ draw_grid_on_point(t_1_B, fx_actual(t_1_B))
 
 
 # labels on tics
-plt.xticks([0, t_1_A, t_1_B, t_1_D], labels=["0", r" $t_1(C)$", r"$t_1(B)$", r"$t_1(D)$"])
+plt.xticks([0, t_1_A, t_1_B, t_1_D], labels=["0", r" $t(P_1,s')$", r"$t(P_1,s)$", r"$t(P_1,s'')$"])
 plt.yticks([t_2_A, fx_actual(t_1_B), t_2_B, fx_predicted(t_1_B), t_2_D], labels=[
-           r"  $t_2(C)$",  r"  ", r"  $t_2(B)$", r"  ", r"  $t_2(D)$", ])
+           r"  $t(P_2,s')$",  r"  ", r"  $t(P_2,s)$", r"  ", r"  $t(P_2,s'')$", ])
 
 
 # labels on axes
@@ -240,7 +236,7 @@ plt.ylabel("Runtimes in machine $P_2$")
 plt.legend()
 plt.legend(loc=4, prop={'size': 9})
 plt.tight_layout()
-plt.savefig("../../paper/images/explaination_prediction.pdf")
+plt.savefig("../paper/images/explaination_prediction.pdf")
 plt.close()
 
 
@@ -273,7 +269,7 @@ plt.xticks(xticks, labels=labels)
 plt.xlabel(r"percentual deviation: $r_j(A,B) \ / \ \bar{r}(A,B$)", fontsize=14)
 plt.ylabel("percentage of cases")
 plt.tight_layout()
-plt.savefig("../../paper/images/histogram_k.pdf")
+plt.savefig("../paper/images/histogram_k.pdf")
 plt.close()
 
 
@@ -305,7 +301,7 @@ plt.xticks([float(i) for i in range(len(y_vec))], labels=[
 plt.xlabel("Error of the confidence interval")
 plt.ylabel("Size of the confidence interval")
 plt.tight_layout()
-plt.savefig("../../paper/images/ci_of_constant_ratio_k.pdf")
+plt.savefig("../paper/images/ci_of_constant_ratio_k.pdf")
 
 plt.close()
 
@@ -313,52 +309,48 @@ plt.close()
 #########################################################################
 
 
-# compute x_vec -> passmark_single_thread_score and y_vec -> average_normalized_runtime
-def get_regression_x_y_from_df(training_df):
-    x_vec = []
-    y_vec = []
-    y_vec_norm = []
-
-    for cpuname in training_df["cpuname"].unique():
-        passmark_single_thread_score = cpu_passmark_single_thread_scores[cpuname]
-        total_time_cpu = training_df[training_df["cpuname"]
-                                     == cpuname]["time"].mean()
-        total_time_cpu_norm = training_df[training_df["cpuname"]
-                                          == cpuname]["normalizedtime"].mean()
-
-        x_vec.append(passmark_single_thread_score)
-        y_vec.append(total_time_cpu)
-        y_vec_norm.append(total_time_cpu_norm)
-    return x_vec, y_vec_norm, y_vec
-
-# same function as get_regression_x_y_from_df() but returns a value for each row in the df,
-# while get_regression_x_y_from_df() averages times by cpu
 
 
 def get_test_x_y(test_df):
-    res = map(get_regression_x_y_from_df, [
-              test_df.iloc[i:] for i in range(df.shape[0])])
-    x_vec_test, _, y_vec_test = [], None, []
 
-    for i in range(df.shape[0]):
-        row = test_df.iloc[i:]
-        res = get_regression_x_y_from_df(row)
-        x_vec_test += res[0]
-        y_vec_test += res[2]
 
-    return x_vec_test, None, y_vec_test
+    if test_df['cpuname'].unique().shape[0] != 2:
+        print('Error, more than two machines in get test x_y(). n of machines was ', test_df['cpuname'].unique().shape[0])
+
+
+
+    if test_df['cpuname'].unique().shape:
+        pass
+
+    x_vec_test = [cpu_passmark_single_thread_scores[item] for item in test_df['cpuname']]
+    y_vec_test = test_df['time'].to_list()
+    y_vec_ref = [float(test_df[(test_df['taskname'] == taskname_item) & (test_df['cpuname'] != cpuname_item)]['time']) for taskname_item, cpuname_item in zip(test_df['taskname'], test_df['cpuname'])]
+
+    #print(y_vec_ref)
+
+    return x_vec_test, y_vec_ref, y_vec_test
 
 
 # returns y_test = g(x) = a * x_test + b  |  where a and b are fitted with training_df
 def fit_and_predict(training_df, x_test):
 
-    x_vec, y_vec_norm, _ = get_regression_x_y_from_df(training_df)
+    x_vec = [cpu_passmark_single_thread_scores[item] for item in training_df['cpuname'].unique()]
+    y_vec_norm = []
+
+    for cpuname in training_df['cpuname'].unique():
+        y_vec_norm.append(training_df[training_df['cpuname'] == cpuname]['time'].sum())
+    
+    
     coef = np.polyfit(x_vec, y_vec_norm, 1)
     poly1d_fn = np.poly1d(coef)
     return poly1d_fn(x_test)
 
+x_vec = [cpu_passmark_single_thread_scores[item] for item in df['cpuname'].unique()]
+y_vec_norm = []
 
-x_vec, y_vec_norm, _ = get_regression_x_y_from_df(df)
+for cpuname in df['cpuname'].unique():
+    y_vec_norm.append(df[df['cpuname'] == cpuname]['time'].sum())
+
 
 res = fit_and_predict(df, [0, 1])
 
@@ -375,13 +367,13 @@ plt.xlabel("Machine score, $x$")
 plt.ylabel("Time, $t(G)$")
 
 plt.tight_layout()
-plt.savefig("../../paper/images/passmark_base_algorithm_regression.pdf")
+plt.savefig("../paper/images/passmark_base_algorithm_regression.pdf")
 plt.close()
 ##### Leave same category out cross validation #####
 
 
 # Compute the percentage of cases in which y_test[i] < y_test_pred[i] is true
-def what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, x_test, y_test, CORRECTION_COEFFICIENT):
+def what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, x_test, y_test, y_P_1_s_prima_ref, CORRECTION_COEFFICIENT):
 
     g_x_predictions = fit_and_predict(df_train, x_test)
 
@@ -389,30 +381,28 @@ def what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, x_
     cases_outside_interval = 0
     #print(["g_x1", "g_x2", "t_prd", "t_actual"])
 
+    # print(x_test)
+    # print(y_test)
+
     perc_time_diff = []
-    for test_index_1 in range(len(x_test)):
-        for test_index_2 in range(len(x_test)):
-            if test_index_1 == test_index_2:
-                continue
-            g_x1 = g_x_predictions[test_index_1]
-            g_x2 = g_x_predictions[test_index_2]
-            t_pred = g_x2 / g_x1 * \
-                y_test[test_index_1] * CORRECTION_COEFFICIENT
-            t_actual = y_test[test_index_2]
-
-            #print(["{:.2f}".format(a_float) for a_float in [g_x1, g_x2, t_pred, t_actual]])
-            perc_time_diff.append(t_pred / t_actual)
-            if t_pred < t_actual:
-                cases_within_interval += 1
-            else:
-                cases_outside_interval += 1
-
+    for index in range(len(x_test)):
+        g_x2 = g_x_predictions[index]
+        g_x1 = [item for item in g_x_predictions if item != g_x2][0] # select the machine score that was not assigned to g_x2. The prediction is made in machine P_2, so the index corresponds to machine P_2.
+        t_pred_P_2_s = g_x2 / g_x1 * y_P_1_s_prima_ref[index] * CORRECTION_COEFFICIENT
+        t_actual_P_2_s = y_test[index]
+        # print('scoreP2,    ScoreP1,    refP1,   pred,   actual, CORRECTION_COEF')
+        # print(["{:.2f}".format(a_float) for a_float in [g_x2, g_x1, y_P_1_s_prima_ref[index], t_pred_P_2_s, t_actual_P_2_s, CORRECTION_COEFFICIENT]])
+        perc_time_diff.append(t_pred_P_2_s / t_actual_P_2_s)
+        if t_pred_P_2_s < t_actual_P_2_s:
+            cases_within_interval += 1
+        else:
+            cases_outside_interval += 1
     return float(cases_within_interval) / (cases_within_interval + cases_outside_interval), mean(perc_time_diff)
 
 
 def df_wraper_what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, df_test, CORRECTION_COEFFICIENT):
-    x_test, _, y_test = get_test_x_y(df_test)
-    return what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, x_test, y_test, CORRECTION_COEFFICIENT)
+    x_test, y_P_1_s_prima_ref, y_test = get_test_x_y(df_test)
+    return what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, x_test, y_test, y_P_1_s_prima_ref, CORRECTION_COEFFICIENT)
 
 
 CORRECTION_COEFFICIENTS = [
@@ -428,10 +418,13 @@ def test_a_CORRECTION_COEFFICIENT(CORRECTION_COEFFICIENT_in):
             for j, hw_2 in enumerate(cpunames):
                 if i >= j:
                     continue
-                sub_df_train = df[(df["problemtype"] != problem) & (
-                    df["cpuname"] != hw_1) & (df["cpuname"] != hw_2)]
-                sub_df_test = df[(df["problemtype"] == problem) & (
-                    (df["cpuname"] == hw_1) | (df["cpuname"] == hw_2))]
+                sub_df_train = df[(df["problemtype"] != problem) & (df["cpuname"] != hw_1) & (df["cpuname"] != hw_2)]
+                sub_df_test = df[(df["problemtype"] == problem) & ((df["cpuname"] == hw_1) | (df["cpuname"] == hw_2))]
+
+                sub_df_train.reset_index(drop=True, inplace=True)
+                sub_df_test.reset_index(drop=True, inplace=True)
+                #print('sub_df_train',sub_df_train)
+                #print('sub_df_test', sub_df_test)
                 pred_lower_cases_perc, perc_time_predicted_with_respect_to_actual = df_wraper_what_percentage_of_predicted_in_regression_is_within_c_interval(
                     sub_df_train, sub_df_test, CORRECTION_COEFFICIENT)
                 pred_lower_actual_cases_perc_list.append(pred_lower_cases_perc)
@@ -472,5 +465,5 @@ plt.ylabel("")
 plt.xlabel("correction parameter  $\gamma$")
 plt.ylim((0, 1.05))
 plt.tight_layout()
-plt.savefig("../../paper/images/correction_coefficient_tradeoff.pdf")
+plt.savefig("../paper/images/correction_coefficient_tradeoff.pdf")
 plt.close()
