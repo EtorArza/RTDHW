@@ -37,7 +37,7 @@ def inverse_bisection(f,target_f_x,a_0,b_0, target_error=0.00001):
             b = middle
         else:
             a =  middle
-    print(it)
+    #print(it)
     return middle
 
 
@@ -111,6 +111,25 @@ def upper_bound_Y_hat_leq_y_hat(n, y_hat):
 
 
 
+# for n in range(0,10001):
+#     for k in range(n // 2, -1, -1):
+#         if(p_Y_leq_y(n, k) < 0.00005):
+#             print(k, end=', ')
+#             #print(n,"->",k)
+#             break
+#         if(k == 0):
+#             print('INT_MAX', end=', ')
+#             #print(n, "->", "INT_MAX")
+#     if n% 25 == 0:
+#         print('')
+
+# exit(0)
+
+
+
+
+
+
 n = 30
 p_values = []
 corrected_p_values = []
@@ -129,7 +148,7 @@ plt.ylabel("p-value")
 plt.legend()
 plt.tight_layout()
 
-plt.savefig("../../paper/images/alpha_vs_corrected_alpha.pdf")
+plt.savefig("../paper/images/alpha_vs_corrected_alpha.pdf")
 
 exit(0)
 

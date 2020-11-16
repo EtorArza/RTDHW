@@ -201,15 +201,15 @@ plt.plot([*x_lims], list(map(fx_predicted, [*x_lims])), linestyle="-.",
 
 # draw points and add text
 plt.scatter(t_1_A, t_2_A, marker="x", c="tab:red", label="Runtime of tasks")
-plt.text(t_1_A+delta, t_2_A+delta, "  $s'$")
+plt.text(t_1_A+delta, t_2_A+delta, r"  $\rho'$")
 plt.scatter(t_1_D, t_2_D, marker="x", c="tab:red")
-plt.text(t_1_D+delta, t_2_D+delta, "  $s''$")
+plt.text(t_1_D+delta, t_2_D+delta, r"  $\rho''$")
 plt.scatter(t_1_B, t_2_B, marker="x", c="tab:red")
-plt.text(t_1_B+delta, t_2_B+delta, "  $s$")
+plt.text(t_1_B+delta, t_2_B+delta, r"  $\rho$")
 plt.scatter(t_1_B, fx_predicted(t_1_B), marker="s", c="tab:blue",
-            linewidths=2.0, label="Predicted runtime of the runtime of $s$ in machine\n $P_2$ with one reference")
+            linewidths=2.0, label=r"Predicted runtime of the runtime of $\rho$ in machine\n $M_2$ with one reference")
 plt.scatter(t_1_B, fx_actual(t_1_B), marker=".", c="tab:orange",
-            linewidths=3.75, label="Predicted runtime of the runtime of $s$ in machine\n $P_2$ with two references")
+            linewidths=3.75, label=r"Predicted runtime of the runtime of $\rho$ in machine\n $M_2$ with two references")
 
 # plt.scatter(t_1_B, fx_predicted(t_1_B), marker=".", c="tab:blue", linewidths=0.30)
 # plt.scatter(t_1_B, fx_actual(t_1_B), marker=".", c="tab:orange", linewidths=0.30)
@@ -224,14 +224,14 @@ draw_grid_on_point(t_1_B, fx_actual(t_1_B))
 
 
 # labels on tics
-plt.xticks([0, t_1_A, t_1_B, t_1_D], labels=["0", r" $t(P_1,s')$", r"$t(P_1,s)$", r"$t(P_1,s'')$"])
+plt.xticks([0, t_1_A, t_1_B, t_1_D], labels=["0", r" $t(M_1,\rho')$", r"$t(M_1,\rho)$", r"$t(M_1,\rho'')$"])
 plt.yticks([t_2_A, fx_actual(t_1_B), t_2_B, fx_predicted(t_1_B), t_2_D], labels=[
-           r"  $t(P_2,s')$",  r"  ", r"  $t(P_2,s)$", r"  ", r"  $t(P_2,s'')$", ])
+           r"  $t(M_2,\rho')$",  r"  ", r"  $t(M_2,\rho)$", r"  ", r"  $t(M_2,\rho'')$", ])
 
 
 # labels on axes
-plt.xlabel("Runtimes in machine $P_1$")
-plt.ylabel("Runtimes in machine $P_2$")
+plt.xlabel("Runtimes in machine $M_1$")
+plt.ylabel("Runtimes in machine $M_2$")
 
 plt.legend()
 plt.legend(loc=4, prop={'size': 9})
@@ -269,7 +269,7 @@ plt.xticks(xticks, labels=labels)
 plt.xlabel(r"percentual deviation: $r_j(A,B) \ / \ \bar{r}(A,B$)", fontsize=14)
 plt.ylabel("percentage of cases")
 plt.tight_layout()
-plt.savefig("../paper/images/histogram_k.pdf")
+plt.savefig("../paper/images/histogram_k_LEGACY.pdf")
 plt.close()
 
 
@@ -359,12 +359,12 @@ a = res[1] - b
 
 plt.plot(x_vec, y_vec_norm, 'rx')
 plt.plot([min(x_vec)*0.6, max(x_vec)*1.1], fit_and_predict(df, [min(x_vec)*0.6, max(x_vec)
-                                                                * 1.1]), '--k', label="$t(x) = "+"{:.6f}".format(a)+"x + "+"{:.4f}".format(b)+"$")
+                                                                * 1.1]), '--k', label=r"$t(s_j) = "+"{:.6f}".format(a)+r"s_j + "+"{:.4f}".format(b)+"$")
 
 
 plt.legend()
-plt.xlabel("Machine score, $x$")
-plt.ylabel("Time, $t(G)$")
+plt.xlabel(r"Machine score, $s_j$")
+plt.ylabel(r"Runtime of $\rho'$, $t(M_j,\rho')$")
 
 plt.tight_layout()
 plt.savefig("../paper/images/passmark_base_algorithm_regression.pdf")
@@ -456,9 +456,9 @@ print("Percentage of cases in which pred was higher:", perc_cases_pred_higher_li
 print("On average, the predicted time was this much percent lower",
       pred_time_in_average_this_percent_lower_than_actual_list)
 plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_higher_list,
-         label=r"$P(\hat{t}_2(B) > t_2(B))$", linestyle="-")
+         label=r"$P(\hat{t}_2 > t_2)$", linestyle="-")
 plt.plot(CORRECTION_COEFFICIENTS, pred_time_in_average_this_percent_lower_than_actual_list,
-         label=r"$\mathbb{E}[\dfrac{\hat{t}_2(B)}{t_2(B)}]$", linestyle="--")
+         label=r"$\mathbb{E}[\dfrac{\hat{t}_2}{t_2}]$", linestyle="--")
 
 plt.legend()
 plt.ylabel("")
