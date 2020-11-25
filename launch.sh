@@ -3,6 +3,8 @@ if [[ "$#" -ne 1  ]] ; then
     echo ""
     echo 'launch.sh inteli5_2400'
     echo ""
+    echo "the processor name is: "
+    cat /proc/cpuinfo | grep "model name" | head -1
     echo 'Exitting...'
     exit 1
 fi
@@ -32,9 +34,9 @@ progressbar()
     fi
 }
 
-echo -n "initialization...  "
-./main.out initial_execution.ini initialization.txt $cpu_name
-echo initialized.
+# echo -n "initialization...  "
+# ./main.out initial_execution.ini initialization.txt $cpu_name
+# echo initialized.
 
 i=0
 for PROBLEM_TYPE in "qap" "tsp" "pfsp" "lop"; do

@@ -382,3 +382,5 @@ amd_fx_6300_hexacore|lop|instances/lop/N-t70f11xx_150.lop|iterated_local_search|
 amd_fx_6300_hexacore|lop|instances/lop/N-t70f11xx_150.lop|iterated_local_search|exchange|1|99999999.900000|2000000|30.616055|2001107|5013538.000000
 amd_fx_6300_hexacore|lop|instances/lop/N-t70f11xx_150.lop|iterated_local_search|insert|1|99999999.900000|2000000|31.263512|2010991|5037618.000000
 amd_fx_6300_hexacore|lop|instances/lop/N-t70f11xx_150.lop|random_search|random_search|1|99999999.900000|2000000|33.587317|2000000|3863572.000000
+--------------------------------------------OLD---------------------------------------------------
+
