@@ -30,11 +30,14 @@ df = pd.DataFrame(lines, columns=columns)
 cpunames = df["cpuname"].unique()
 cpu_passmark_single_thread_scores = {
     'i5_470U_1_33gh': 411,
-    'i7_2760QM_2_4gh': 1550,
+    'i7_2760QM_2_4gh': 1563,
     'intel_celeron_n4100_1_1gh': 1032,
-    'ryzen7_1800X': 2176,
+    'ryzen7_1800X': 2180,
     'i7_7500U_2_7gh': 2025,
-    'amd_fx_6300_hexacore': 1484
+    'amd_fx_6300_hexacore': 1484,
+    'AMD_A9_9420_RADEON_R5':1311,
+    'i7_6700HQ_CPU_2_60GHz_bisk':1918,
+
 }
 
 
@@ -282,7 +285,7 @@ x_vec = [
 target_x = [0.05, 0.1, 0.2, 0.5]
 
 print("##################################################")
-print("These two vectors below should be equal. Change y_vec so that they are.")
+print("These two vectors below should be equal. Change y_vec so that they are. (LEGACY)")
 print(x_vec)
 print(target_x)
 print("##################################################")
@@ -467,3 +470,34 @@ plt.ylim((0, 1.05))
 plt.tight_layout()
 plt.savefig("../paper/images/correction_coefficient_tradeoff.pdf")
 plt.close()
+
+print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
+print("Add to article preface:")
+
+max_prob_longer = 0.01
+
+gamma = 0
+expected_runtime = 0
+
+for i in range(len(perc_cases_pred_higher_list)):
+    if perc_cases_pred_higher_list[i] < max_prob_longer:
+        gamma = CORRECTION_COEFFICIENTS[i]
+        expected_runtime = pred_time_in_average_this_percent_lower_than_actual_list[i]
+        break
+        
+
+
+
+print(r'\newcommand\nmachines{',len(cpunames),'}',sep='')
+print(r'\newcommand\ntasks{',len(tasks),'}',sep='')
+print(r'\newcommand\aparamregression{',"{:.5f}".format(a),'}',sep='')
+print(r'\newcommand\bparamregression{',round(b),'}',sep='')
+print(r'\newcommand\bdivaparamregression{',"{:.2f}".format(b/a),'}',sep='')
+print(r'\newcommand\minusbdivaparamregression{',"{:.2f}".format(-b/a),'}',sep='')
+print(r'\newcommand\chosengammavalue{',gamma,'}',sep='')
+print(r'\newcommand\expectedruntimeratiowithchosengamma{',"{:.3f}".format(expected_runtime),'}',sep='')
+print(r'\newcommand\factormultiplytimesexampleI{',"{:.3f}".format(gamma*(-b/a - cpu_passmark_single_thread_scores['intel_celeron_n4100_1_1gh']) / (-b/a - 1230)),'}',sep='')
+print(r'\newcommand\factormultiplytimesexampleII{',"{:.3f}".format(gamma*(-b/a - cpu_passmark_single_thread_scores['intel_celeron_n4100_1_1gh']) / (-b/a - cpu_passmark_single_thread_scores['ryzen7_1800X'])),'}',sep='')
+
+
