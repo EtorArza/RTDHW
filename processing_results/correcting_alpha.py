@@ -87,14 +87,14 @@ def prob_bin_n_p_k(n,p,k):
 
 
 
-def upper_bound_Y_hat_leq_y_hat(n, y_hat):
+def upper_bound_Y_hat_leq_y_hat(n, k):
 
     res = 0
 
-    for k in range(0, n+1):
-        mul_1 = 1 - sum([prob_bin_n_p_k(n,0.01,l) for l in range(0, k - y_hat)])
-        mul_2 = prob_bin_n_p_k(n,0.5,k)
-        #print("range:",(0,n+j-y_hat+1))
+    for v in range(0, n+1):
+        mul_1 = 1 - sum([prob_bin_n_p_k(n,0.01,l) for l in range(0, v - k)])
+        mul_2 = prob_bin_n_p_k(n,0.5,v)
+        #print("range:",(0,n+j-k+1))
         # print((mul_1,mul_2))
         res += mul_1 * mul_2
     return res

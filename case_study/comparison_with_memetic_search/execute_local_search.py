@@ -4,7 +4,7 @@ import pandas as pd
 
 res_file = "case_study/comparison_with_memetic_search/res_memetic.csv"
 instances_dir = "case_study/comparison_with_memetic_search/instances/"
-csv_path = "case_study/comparison_with_memetic_search/stopping_criterion.csv"
+csv_path = "case_study/comparison_with_memetic_search/data_from_paper_and_stopping_criterion.csv"
 
 
 def write_conf_file(PROBLEM_PATH, MAX_SOLVER_TIME):
@@ -40,14 +40,16 @@ def get_result(PROBLEM_PATH, MAX_SOLVER_TIME):
 
 
 df = pd.read_csv(csv_path)
+with open(res_file, "w") as res_file_obj:    	
+    print('instance', 'hat_t_2', 'hat_b_i', 'a_i', 'is_hat_b_i_larger_than_ai', sep=",", file=res_file_obj)
 
 
 for row_index in range(df.shape[0]):
-    instance_name, runtime_hat_t_2 = df.iloc[row_index, :]
+    instance_name, t_1, a_i, runtime_hat_t_2 = df.iloc[row_index, :]
     print(instance_name)
     with open(res_file, "a") as res_file_obj:    	
-        print(instance_name, runtime_hat_t_2, end=",", sep=",", file=res_file_obj)
-        print(get_result(instances_dir+instance_name+".qap", str(runtime_hat_t_2)), file=res_file_obj)
+        hat_b_i = get_result(instances_dir+instance_name+".qap", str(runtime_hat_t_2))
+        print(instance_name, runtime_hat_t_2, hat_b_i, a_i, 'nan' if a_i == hat_b_i else int(float(hat_b_i) > a_i), sep=",", file=res_file_obj)
 
 #instance_path_list = [instances_dir+el for el in str(subprocess.check_output("ls {instances_dir}".format(instances_dir=instances_dir), shell=True)).strip("'b").split("\\n") if el != ""]
 
