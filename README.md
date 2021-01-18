@@ -102,6 +102,7 @@ It would <ins>not</ins> be correct to conclude that the two algorithms perform s
 
 It is important to note that, if we had considered the original runtimes t_1 as the stopping criterion for algorithm B in machine M<sub>2</sub> (longer than the estimated equivalent runtime t̂<sub>2</sub>), the local search would have had an unfairly longer runtime.
 In other words, the comparison would have been biased towards the local search. 
+
 -----------------------------------
 
 
