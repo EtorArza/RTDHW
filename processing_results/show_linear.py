@@ -460,12 +460,15 @@ print("On average, the predicted time was this much percent lower",
       pred_time_in_average_this_percent_lower_than_actual_list)
 plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_higher_list,
          label=r"$P(\hat{t}_2 > t_2)$", linestyle="-")
-plt.plot(CORRECTION_COEFFICIENTS, pred_time_in_average_this_percent_lower_than_actual_list,
-         label=r"$\mathbb{E}[\dfrac{\hat{t}_2}{t_2}]$", linestyle="--")
+# plt.plot(CORRECTION_COEFFICIENTS, pred_time_in_average_this_percent_lower_than_actual_list,
+#          label=r"$\mathbb{E}[\dfrac{\hat{t}_2}{t_2}]$", linestyle="--")
 
-plt.legend()
-plt.ylabel("")
-plt.xlabel("correction parameter  $\gamma$")
+# plt.plot(CORRECTION_COEFFICIENTS, CORRECTION_COEFFICIENTS,
+#          label=r"$\gamma$", linestyle="-.")
+
+# plt.legend()
+plt.ylabel(r"$P(\hat{t}_2 > t_2)$")
+plt.xlabel("correction parameter  $\gamma = \mathbb{E}[\dfrac{\hat{t}_2}{t_2}]$")
 plt.ylim((0, 1.05))
 plt.tight_layout()
 plt.savefig("../paper/images/correction_coefficient_tradeoff.pdf")
