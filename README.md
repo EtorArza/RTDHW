@@ -1,5 +1,5 @@
 ## RunTime in Different HardWare (RTDHW)
-This is the repo of the paper _On the fair comparison of algorithms in different machines._ 
+This is the repo of the paper _On the fair comparison of optimization algorithms in different machines._ 
 In this paper, we introduce a methodology to statistically asses the difference between the performance of two optimization algorithms executed in different machines.
 The optimization problem is assumed to be a <ins>minimization</ins> problem.
 In the following, we present two examples of how this methodology can be applied.
