@@ -500,7 +500,7 @@ print(r'\newcommand\bdivaparamregression{',"{:.2f}".format(b/a),'}',sep='')
 print(r'\newcommand\minusbdivaparamregression{',"{:.2f}".format(-b/a),'}',sep='')
 print(r'\newcommand\chosengammavalue{',gamma,'}',sep='')
 print(r'\newcommand\expectedruntimeratiowithchosengamma{',"{:.3f}".format(expected_runtime),'}',sep='')
-print(r'\newcommand\factormultiplytimesexampleI{',"{:.3f}".format(gamma*(-b/a - cpu_passmark_single_thread_scores['intel_celeron_n4100_1_1gh']) / (-b/a - 1230)),'}',sep='')
+print(r'\newcommand\factormultiplytimesexampleI{',"{:.3f}".format(gamma*(-b/a - cpu_passmark_single_thread_scores['intel_celeron_n4100_1_1gh']) / (-b/a - 1219)),'}',sep='')
 print(r'\newcommand\factormultiplytimesexampleII{',"{:.3f}".format(gamma*(-b/a - cpu_passmark_single_thread_scores['intel_celeron_n4100_1_1gh']) / (-b/a - cpu_passmark_single_thread_scores['ryzen7_1800X'])),'}',sep='')
 
 
