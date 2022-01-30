@@ -29,14 +29,14 @@ df = pd.DataFrame(lines, columns=columns)
 
 cpunames = df["cpuname"].unique()
 cpu_passmark_single_thread_scores = {
-    'i5_470U_1_33gh': 411,
-    'i7_2760QM_2_4gh': 1563,
-    'intel_celeron_n4100_1_1gh': 1032,
-    'ryzen7_1800X': 2180,
-    'i7_7500U_2_7gh': 2025,
-    'amd_fx_6300_hexacore': 1484,
-    'AMD_A9_9420_RADEON_R5':1311,
-    'i7_6700HQ_CPU_2_60GHz_bisk':1918,
+    'i5_470U_1_33gh': 539,
+    'i7_2760QM_2_4gh': 1559,
+    'intel_celeron_n4100_1_1gh': 1012,
+    'ryzen7_1800X': 2185,
+    'i7_7500U_2_7gh': 1955,
+    'amd_fx_6300_hexacore': 1486,
+    'AMD_A9_9420_RADEON_R5':1344,
+    'i7_6700HQ_CPU_2_60GHz_bisk':1921,
 
 }
 
