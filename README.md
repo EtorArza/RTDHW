@@ -17,7 +17,7 @@ To apply the proposed methodology, we need to find certain information about the
 We need the list of instances to be used in the comparison, the average objective value obtained by the memetic search algorithm and the runtime of the memetic search algorithm in each of the instances.
 We list this information extracted from the article by Benlic et al.[1] in the table below.
 In addition, we need to find the CPU model of the machine in which the memetic search was run (machine M<sub>1</sub>), which is "Intel Xeon E5440 2.83GHz" as specified in their article.
-Finally, the machine score of this CPU, measured as PassMark <ins>single thread</ins> score is s<sub>1</sub> = 1230, which can be found out in the [PassMark website](https://web.archive.org/web/20201202213956/https://www.cpubenchmark.net/singleThread.html). 
+Finally, the machine score of this CPU, measured as PassMark <ins>single thread</ins> score is s<sub>1</sub> = 1230, which can be looked up in the [PassMark website](https://web.archive.org/web/20201202213956/https://www.cpubenchmark.net/singleThread.html). 
 It is important to use the scores on the WayBack Machine link provided above, as the PassMark scores change all the time, and the method is updated with the scores from that link.
 
 
@@ -124,7 +124,7 @@ To apply the proposed methodology, we need to find certain information about the
 We need the list of instances to be used in the comparison, the average objective value obtained by the EDA and the runtime used in each instances.
 We list this information extracted from the paper[2] in the table below.
 In addition, we need to find the CPU model of the machine in which the memetic search was run (machine M<sub>1</sub>), which is "AMD Ryzen 7 1800X", as specified in the paper.
-Finally, the machine score of this CPU, measured as PassMark single thread score is s<sub>1</sub> = 2180, which can be found out in the PassMark website.
+Finally, the machine score of this CPU, measured as PassMark single thread score is s<sub>1</sub> = 2180, which can be looked up in the PassMark website.
 
 
 
