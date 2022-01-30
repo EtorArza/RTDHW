@@ -1,4 +1,6 @@
-|----------|-----:|
+
+| Model Name | Passmark Single Thread score
+|-----|-----|
 AArch64 rev 0 (aarch64)|1098
 AArch64 rev 1 (aarch64)|1039
 AArch64 rev 2 (aarch64)|933
