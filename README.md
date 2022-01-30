@@ -18,11 +18,7 @@ We need the list of instances to be used in the comparison, the average objectiv
 We list this information extracted from the article by Benlic et al.[1] in the table below.
 In addition, we need to find the CPU model of the machine in which the memetic search was run (machine M<sub>1</sub>), which is "Intel Xeon E5440 2.83GHz" as specified in their article.
 Finally, the machine score of this CPU, measured as PassMark <ins>single thread</ins> score is s<sub>1</sub> = 1230, which can be found out in the [PassMark website](https://web.archive.org/web/20201202213956/https://www.cpubenchmark.net/singleThread.html). 
-<<<<<<< HEAD
 It is important to use the scores on the WayBack Machine link provided above, as the PassMark scores change all the time, and the method is updated with the scores from that link.
-=======
-It is important to use the scores on WayBack Machine link provided above, as the PassMark scores change all the time, and the method is updated with the scores from that link.
->>>>>>> 2d9e9019a312abda5644b81bf69352985b242f4a
 
 
 
@@ -53,11 +49,7 @@ With the data already gathered, we need to predict the equivalent runtime of eac
 To make the prediction, we need the machine score s<sub>2</sub> of this machine.
 The CPU model of M<sub>2</sub> is "Intel Celeron N4100", with a PassMark <ins>single thread</ins> score of s<sub>2</sub> = 1032.
 This can be found in the [PassMark website](https://web.archive.org/web/20201202213956/https://www.cpubenchmark.net/singleThread.html). 
-<<<<<<< HEAD
 It is important to use the scores on the WayBack Machine link provided above, as the PassMark scores change all the time, and the method is updated with the scores from that link.
-=======
-It is important to use the scores on WayBack Machine link provided above, as the PassMark scores change all the time, and the method is updated with the scores from that link.
->>>>>>> 2d9e9019a312abda5644b81bf69352985b242f4a
 With this information, we are ready to predict the equivalent runtime in machine M<sub>2</sub> with the following formula (Equation (6) in the paper):
 
 <img src="/github_readme_assets/images/equation_to_predict_equivalent_runtime_case_study_1.png" width="600">
