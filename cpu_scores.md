@@ -1,3 +1,5 @@
+The PassMark single thread scores as shown in the PassMark website in January 30th 2022.
+The PassMark scores evolve over time, so the scores in the table below (scraped from the [PassMark website](https://www.cpubenchmark.net/CPU_mega_page.html) on January 30th 2022) should be used, since the model was fitted with these scores.
 
 | Model Name | Passmark Single Thread score
 |-----|-----|

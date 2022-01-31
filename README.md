@@ -17,8 +17,8 @@ To apply the proposed methodology, we need to find certain information about the
 We need the list of instances to be used in the comparison, the average objective value obtained by the memetic search algorithm and the runtime of the memetic search algorithm in each of the instances.
 We list this information extracted from the article by Benlic et al.[1] in the table below.
 In addition, we need to find the CPU model of the machine in which the memetic search was run (machine M<sub>1</sub>), which is "Intel Xeon E5440 2.83GHz" as specified in their article.
-Finally, the machine score of this CPU, measured as PassMark <ins>single thread</ins> score is s<sub>1</sub> = 1230, which can be looked up in the [PassMark website](https://web.archive.org/web/20201202213956/https://www.cpubenchmark.net/singleThread.html). 
-It is important to use the scores on the WayBack Machine link provided above, as the PassMark scores change all the time, and the method is updated with the scores from that link.
+Finally, the machine score of this CPU, measured as PassMark <ins>single thread</ins> score is s<sub>1</sub> = 1232, which can be looked up in the file [cpu_scores.md](https://github.com/EtorArza/RTDHW/blob/master/cpu_scores.md). 
+It is important to use the PassMark single thread scores from December 2022 in this file, as the PassMark scores change all the time, and the methodology was fitted with these scores.
 
 
 
@@ -48,8 +48,8 @@ __Step 2: Predicting the equivalent runtime__
 With the data already gathered, we need to predict the equivalent runtime of each instance for the machine in which the local search algorithm will be executed (machine M<sub>2</sub>).
 To make the prediction, we need the machine score s<sub>2</sub> of this machine.
 The CPU model of M<sub>2</sub> is "Intel Celeron N4100", with a PassMark <ins>single thread</ins> score of s<sub>2</sub> = 1032.
-This can be found in the [PassMark website](https://web.archive.org/web/20201202213956/https://www.cpubenchmark.net/singleThread.html). 
-It is important to use the scores on the WayBack Machine link provided above, as the PassMark scores change all the time, and the method is updated with the scores from that link.
+This can be looked up in the file [cpu_scores.md](https://github.com/EtorArza/RTDHW/blob/master/cpu_scores.md). 
+It is important to use the PassMark single thread scores from December 2022 in this file, as the PassMark scores change all the time, and the methodology was fitted with these scores.
 With this information, we are ready to predict the equivalent runtime in machine M<sub>2</sub> with the following formula (Equation (6) in the paper):
 
 <img src="/github_readme_assets/images/equation_to_predict_equivalent_runtime_case_study_1.png" width="600">
