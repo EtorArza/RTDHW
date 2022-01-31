@@ -120,10 +120,10 @@ In this case, the EDA is algorithm A, because this is the algorithm that is not 
 
 __Step 1: Obtaining the data__
 
-To apply the proposed methodology, we need to find certain information about the execution of the memetic algorithm.
+To apply the proposed methodology, we need to find certain information about the execution of the EDA.
 We need the list of instances to be used in the comparison, the average objective value obtained by the EDA and the runtime used in each instances.
 We list this information extracted from the paper[2] in the table below.
-In addition, we need to find the CPU model of the machine in which the memetic search was run (machine M<sub>1</sub>), which is "AMD Ryzen 7 1800X", as specified in the paper.
+In addition, we need to find the CPU model of the machine in which the EDA was run (machine M<sub>1</sub>), which is "AMD Ryzen 7 1800X", as specified in the paper.
 Finally, the machine score of this CPU, measured as PassMark single thread score is s<sub>1</sub> = 2180, which can be looked up in the PassMark website.
 
 
@@ -168,7 +168,7 @@ With this information, we are ready to predict the equivalent runtime in machine
 <img src="/github_readme_assets/images/equation_to_predict_equivalent_runtime_case_study_2.png" width="600">
 
 
-where t<sub>1</sub> is substituted with the runtime of the memetic search algorithm in each instance, listed in the table above.
+where t<sub>1</sub> is substituted with the runtime of the EDA in each instance, listed in the table above.
 
 
 __Step 3: Running the experiments__
