@@ -1,4 +1,15 @@
-model name	: AMD Ryzen 5 5500U with Radeon Graphics
+AMD Ryzen 5 5500U
+2457
 8855446047
 3170623885
 -----
+Intel(R) Xeon(R) CPU @ 2.20GHz
+1383
+16865530736
+4928244169
+-----
+
+
+
+
+
