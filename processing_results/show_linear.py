@@ -408,8 +408,12 @@ def df_wraper_what_percentage_of_predicted_in_regression_is_within_c_interval(df
     return what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, x_test, y_test, y_P_1_s_prima_ref, CORRECTION_COEFFICIENT)
 
 
-CORRECTION_COEFFICIENTS = [
-    1.0 - 0.025 / (2 ** i) for i in range(6, 1, -1)]+[1.0 - 0.025*i for i in range(1, 28)]
+n_sample_points_per_segment = 50
+CORRECTION_COEFFICIENTS = np.concatenate((
+    np.linspace(1.0, 0.95, n_sample_points_per_segment, endpoint=False),
+    np.linspace(0.95, 0.85, n_sample_points_per_segment, endpoint=False),
+    np.linspace(0.85, 0.5, n_sample_points_per_segment)
+    ))
 
 
 def test_a_CORRECTION_COEFFICIENT(CORRECTION_COEFFICIENT_in):
@@ -458,6 +462,13 @@ print("The correction coefficients:", CORRECTION_COEFFICIENTS)
 print("Percentage of cases in which pred was higher:", perc_cases_pred_higher_list)
 print("On average, the predicted time was this much percent lower",
       pred_time_in_average_this_percent_lower_than_actual_list)
+
+print("Correction coefficients and percentage of cases as python code.")
+print("Add the following three lines to  the file 'equivalent_runtime.py'.")
+print("correction_coefficients = [", ",".join([str(el) for el in CORRECTION_COEFFICIENTS]), "]", sep="")
+print("percentages_higher_than_predicted = [", ",".join([str(el) for el in perc_cases_pred_higher_list]), "]", sep="")
+print("max_passmark =", b/a)
+
 plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_higher_list,
          label=r"$P(\hat{t}_2 > t_2)$", linestyle="-")
 # plt.plot(CORRECTION_COEFFICIENTS, pred_time_in_average_this_percent_lower_than_actual_list,
