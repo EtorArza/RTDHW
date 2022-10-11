@@ -1,0 +1,4 @@
+model name	: AMD Ryzen 5 5500U with Radeon Graphics
+8855446047
+3170623885
+-----
