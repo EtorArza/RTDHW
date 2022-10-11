@@ -12,7 +12,7 @@ columns = ["cpuname", "problemtype", "problempath", "methodname", "operatorname"
            "maxtime", "maxevals", "time", "evals", "fitness", "taskname"]
 
 lines = []
-with open("result.txt", "r") as f:
+with open("linear_regression_calibration/result.txt", "r") as f:
     for line in f:
         line = line.strip()
         line = line.split("|")
@@ -152,7 +152,7 @@ for metric, title in zip(["pearson", "spearman", "kendall"], ["Pearson's correla
     plt.ylabel("machine index")
     plt.title(title)
     plt.tight_layout()
-    axes.figure.savefig("../paper/images/" + metric + ".pdf")
+    axes.figure.savefig("figures/" + metric + ".pdf")
     plt.close()
 
 # hmap.figure.savefig("Correlation_Heatmap_Lower_Triangle_with_Seaborn_using_mask.png",
@@ -239,7 +239,7 @@ plt.ylabel("Runtimes in machine $M_2$")
 plt.legend()
 plt.legend(loc=4, prop={'size': 9})
 plt.tight_layout()
-plt.savefig("../paper/images/explaination_prediction.pdf")
+plt.savefig("figures/explaination_prediction.pdf")
 plt.close()
 
 
@@ -272,7 +272,7 @@ plt.xticks(xticks, labels=labels)
 plt.xlabel(r"percentual deviation: $r_j(A,B) \ / \ \bar{r}(A,B$)", fontsize=14)
 plt.ylabel("percentage of cases")
 plt.tight_layout()
-plt.savefig("../paper/images/histogram_k_LEGACY.pdf")
+plt.savefig("figures/histogram_k_LEGACY.pdf")
 plt.close()
 
 
@@ -304,7 +304,7 @@ plt.xticks([float(i) for i in range(len(y_vec))], labels=[
 plt.xlabel("Error of the confidence interval")
 plt.ylabel("Size of the confidence interval")
 plt.tight_layout()
-plt.savefig("../paper/images/ci_of_constant_ratio_k.pdf")
+plt.savefig("figures/ci_of_constant_ratio_k.pdf")
 
 plt.close()
 
@@ -370,7 +370,7 @@ plt.xlabel(r"Machine score, $s_j$")
 plt.ylabel(r"Runtime of $\rho'$, $t(M_j,\rho')$")
 
 plt.tight_layout()
-plt.savefig("../paper/images/passmark_base_algorithm_regression.pdf")
+plt.savefig("figures/passmark_base_algorithm_regression.pdf")
 plt.close()
 ##### Leave same category out cross validation #####
 
@@ -471,7 +471,7 @@ plt.ylabel(r"$P(\hat{t}_2 > t_2)$")
 plt.xlabel("correction parameter  $\gamma = \mathbb{E}[\dfrac{\hat{t}_2}{t_2}]$")
 plt.ylim((0, 1.05))
 plt.tight_layout()
-plt.savefig("../paper/images/correction_coefficient_tradeoff.pdf")
+plt.savefig("figures/correction_coefficient_tradeoff.pdf")
 plt.close()
 
 print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")

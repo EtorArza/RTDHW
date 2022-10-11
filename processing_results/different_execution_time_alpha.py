@@ -73,7 +73,7 @@ def get_samples_of_certain_time(data_chunck, execution_time):
 
 list_of_lines = []
 
-with open("../result_diff_execution_time.txt") as f:
+with open("linear_regression_calibration/result_diff_execution_time.txt") as f:
     for line in f:
         list_of_lines.append(line.strip())
 
@@ -104,4 +104,4 @@ plt.ylabel("Probability of type I error")
 plt.ylim(bottom=0)
 
 plt.tight_layout()
-plt.savefig("extra_execution_time_typeI_error.pdf")
+plt.savefig("figures/extra_execution_time_typeI_error.pdf")
