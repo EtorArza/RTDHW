@@ -1,1 +1,0 @@
-dummy_machine|qap|case_study/comparison_with_hamming_eda/instances/tai80b.qap|iterated_local_search|exchange|20|13.150200|-1|263.267518|20206982|-830729983.000000

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd linear_regresion_calibration
 make
 
 progressbar()
