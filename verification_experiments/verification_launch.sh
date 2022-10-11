@@ -7,21 +7,21 @@ g++ main_verification_2_magic_squares.cpp -o verification2.out
 
 echo "the processor name is: "
 cat /proc/cpuinfo | grep "model name" | head -1
-cat /proc/cpuinfo | grep "model name" | head -1 >> result.txt
+cat /proc/cpuinfo | grep "model name" | head -1 >> result.csv
 
 
 START="$(date +%s%N)"
 ./verification1.out
 DURATION=$[ $(date +%s%N) - ${START} ]
 echo ${DURATION}
-echo ${DURATION} >> result.txt
+echo -n ",${DURATION}," >> result.csv
 echo "-----"
 
 START="$(date +%s%N)"
 ./verification2.out
 DURATION=$[ $(date +%s%N) - ${START} ]
 echo ${DURATION}
-echo ${DURATION} >> result.txt
+echo "${DURATION}," >> result.csv
 echo "-----"
 
 
@@ -29,4 +29,3 @@ echo "-----"
 
 
 
-echo "-----" >> result.txt
