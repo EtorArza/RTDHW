@@ -478,7 +478,7 @@ plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_higher_list,
 #          label=r"$\gamma$", linestyle="-.")
 
 # plt.legend()
-plt.ylabel(r"$P(\hat{t}_2 > t_2)$")
+plt.ylabel(r"$p_{\gamma} = P(\hat{t}_2 > t_2)$")
 plt.xlabel("correction parameter  $\gamma = \mathbb{E}[\dfrac{\hat{t}_2}{t_2}]$")
 plt.ylim((0, 1.05))
 plt.tight_layout()
