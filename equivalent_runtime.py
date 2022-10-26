@@ -162,13 +162,13 @@ def get_equivalent_runtime_from_probability(s1, s2, t_1, target_probability):
 
 def usage():
     print("This script can be used to calculate the equivalent runtime. It requires four input arguments:")
-    print("1) The PassMark score of machine 1")
-    print("2) The PassMark score of machine 2")
-    print("3) The runtime in machine 1")
-    print("4) The desired probability of prediciting a unfairly higher runtime. It must be in the interval (0.003, 0.5)")
+    print("1) The desired probability of prediciting a unfairly higher runtime, p_gamma. It must be in the interval (0.003, 0.5)")
+    print("2) The PassMark score of machine 1")
+    print("3) The PassMark score of machine 2")
+    print("4) The runtime in machine 1")
     print("")
     print("Example: ")
-    print("python equivalent_runtime.py 1540 1643 23.2 0.5")
+    print("python equivalent_runtime.py 0.5 1540 1643 23.2")
 
 
 if __name__ == "__main__":
@@ -176,4 +176,4 @@ if __name__ == "__main__":
     if len(sys.argv) != 5:
         usage()
         exit(0)
-    print(get_equivalent_runtime_from_probability(float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4])))
+    print(get_equivalent_runtime_from_probability(float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]), float(sys.argv[1])))
