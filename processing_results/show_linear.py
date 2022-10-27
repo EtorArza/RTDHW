@@ -9,7 +9,20 @@ import seaborn as sns
 
 
 columns = ["cpuname", "problemtype", "problempath", "methodname", "operatorname", "nevals",
-           "maxtime", "maxevals", "time", "evals", "fitness", "taskname"]
+           "maxtime", "maxevals", "time", "evals", "fitness", "taskname", "cpuscore"]
+
+
+cpu_passmark_single_thread_scores = {
+    'i5_470U_1_33gh': 539,
+    'i7_2760QM_2_4gh': 1559,
+    'intel_celeron_n4100_1_1gh': 1012,
+    'ryzen7_1800X': 2185,
+    'i7_7500U_2_7gh': 1955,
+    'amd_fx_6300_hexacore': 1486,
+    'AMD_A9_9420_RADEON_R5':1344,
+    'i7_6700HQ_CPU_2_60GHz_bisk':1921,
+}
+
 
 lines = []
 with open("linear_regression_calibration/result.txt", "r") as f:
@@ -17,7 +30,7 @@ with open("linear_regression_calibration/result.txt", "r") as f:
         line = line.strip()
         line = line.split("|")
         line = line[0:5] + [int(line[5])] + [float(line[6])] + [int(line[7])] + [float(line[8])] + [
-            int(line[9])] + [float(line[10])] + [line[2].split("/")[-1] + "_" + line[4]]
+            int(line[9])] + [float(line[10])] + [line[2].split("/")[-1] + "_" + line[4]] + [cpu_passmark_single_thread_scores[line[0]]]
 
         lines.append(line)
 
@@ -28,17 +41,6 @@ df = pd.DataFrame(lines, columns=columns)
 
 
 cpunames = df["cpuname"].unique()
-cpu_passmark_single_thread_scores = {
-    'i5_470U_1_33gh': 539,
-    'i7_2760QM_2_4gh': 1559,
-    'intel_celeron_n4100_1_1gh': 1012,
-    'ryzen7_1800X': 2185,
-    'i7_7500U_2_7gh': 1955,
-    'amd_fx_6300_hexacore': 1486,
-    'AMD_A9_9420_RADEON_R5':1344,
-    'i7_6700HQ_CPU_2_60GHz_bisk':1921,
-
-}
 
 
 def inverse_bisection(f, target_f_x, a_0, b_0, target_error=0.00000001):
@@ -375,37 +377,55 @@ plt.close()
 ##### Leave same category out cross validation #####
 
 
-# Compute the percentage of cases in which y_test[i] < y_test_pred[i] is true
-def what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, x_test, y_test, y_P_1_s_prima_ref, CORRECTION_COEFFICIENT):
+# Compute the percentage of cases in which \hat{t}_2 < t_2 is true
+def what_percentage_of_predicted_in_equiv_runtime_is_lower_than_actual(df_train, df_test, CORRECTION_COEFFICIENT):
 
-    g_x_predictions = fit_and_predict(df_train, x_test)
+    # x_test, y_P_1_s_prima_ref, y_test = get_test_x_y(df_test)
 
-    cases_within_interval = 0
-    cases_outside_interval = 0
+
+    res = fit_and_predict(df_train, [0, 1])
+
+    b_tmp = res[0]
+    a_tmp = res[1] - b_tmp
+
+    coef_prediction_of_equiv_runtime = -b_tmp/a_tmp
+    
+
+    cases_predicted_time_lower = 0
+    cases_predicter_time_unfairly_longer = 0
     #print(["g_x1", "g_x2", "t_prd", "t_actual"])
 
     # print(x_test)
     # print(y_test)
 
     perc_time_diff = []
-    for index in range(len(x_test)):
-        g_x2 = g_x_predictions[index]
-        g_x1 = [item for item in g_x_predictions if item != g_x2][0] # select the machine score that was not assigned to g_x2. The prediction is made in machine P_2, so the index corresponds to machine P_2.
-        t_pred_P_2_s = g_x2 / g_x1 * y_P_1_s_prima_ref[index] * CORRECTION_COEFFICIENT
-        t_actual_P_2_s = y_test[index]
-        # print('scoreP2,    ScoreP1,    refP1,   pred,   actual, CORRECTION_COEF')
-        # print(["{:.2f}".format(a_float) for a_float in [g_x2, g_x1, y_P_1_s_prima_ref[index], t_pred_P_2_s, t_actual_P_2_s, CORRECTION_COEFFICIENT]])
-        perc_time_diff.append(t_pred_P_2_s / t_actual_P_2_s)
-        if t_pred_P_2_s < t_actual_P_2_s:
-            cases_within_interval += 1
+
+    for index, row_1 in df_test.iterrows():
+        row_2 = df_test[(df_test["taskname"] == row_1['taskname']) & (df_test["cpuname"] != row_1["cpuname"])]
+        assert len(row_2) == 1
+        row_2 = row_2.iloc[0]
+        
+        s_1 = row_1["cpuscore"]
+        s_2 = row_2["cpuscore"]
+        t_1 = row_1["time"]
+        t_2 = row_2["time"]
+
+        predicted_t_2 = t_1 * (coef_prediction_of_equiv_runtime - s_2) / (coef_prediction_of_equiv_runtime - s_1) * CORRECTION_COEFFICIENT
+        
+        assert abs((t_2 - predicted_t_2) / t_2) < 2
+        # print((t_2 - predicted_t_2) / t_2)
+
+        assert predicted_t_2 > 0
+
+        perc_time_diff.append(predicted_t_2 / t_2)
+        if predicted_t_2 < t_2:
+            cases_predicted_time_lower += 1
         else:
-            cases_outside_interval += 1
-    return float(cases_within_interval) / (cases_within_interval + cases_outside_interval), mean(perc_time_diff)
+            cases_predicter_time_unfairly_longer += 1
+
+    return float(cases_predicted_time_lower) / (cases_predicted_time_lower + cases_predicter_time_unfairly_longer), mean(perc_time_diff)
 
 
-def df_wraper_what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, df_test, CORRECTION_COEFFICIENT):
-    x_test, y_P_1_s_prima_ref, y_test = get_test_x_y(df_test)
-    return what_percentage_of_predicted_in_regression_is_within_c_interval(df_train, x_test, y_test, y_P_1_s_prima_ref, CORRECTION_COEFFICIENT)
 
 
 n_sample_points_per_segment = 50
@@ -432,7 +452,7 @@ def test_a_CORRECTION_COEFFICIENT(CORRECTION_COEFFICIENT_in):
                 sub_df_test.reset_index(drop=True, inplace=True)
                 #print('sub_df_train',sub_df_train)
                 #print('sub_df_test', sub_df_test)
-                pred_lower_cases_perc, perc_time_predicted_with_respect_to_actual = df_wraper_what_percentage_of_predicted_in_regression_is_within_c_interval(
+                pred_lower_cases_perc, perc_time_predicted_with_respect_to_actual = what_percentage_of_predicted_in_equiv_runtime_is_lower_than_actual(
                     sub_df_train, sub_df_test, CORRECTION_COEFFICIENT)
                 pred_lower_actual_cases_perc_list.append(pred_lower_cases_perc)
                 perc_time_predicted_with_respect_to_actual_list.append(
