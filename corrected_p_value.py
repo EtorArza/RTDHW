@@ -1,9 +1,7 @@
 import math
 from decimal import *
-import scipy
 
-
-getcontext().prec = 100
+getcontext().prec = 50
 max_n = 500
 alpha_values = [0.05,0.01,0.001]
 
@@ -50,37 +48,6 @@ def y_r_given_z_r(n, z_r):
     return n * 0.5 +  z_r * math.sqrt(n * 0.25) - 0.5
 
 
-# Area to the left of this point in a normal distribution of mean 0 and variance 1
-def normal_cummulative_distribution_function(x):
-    return scipy.special.ndtr(x)
-
-def phi(x):
-    'Cumulative distribution function for the standard normal distribution'
-    return (1.0 + math.erf(x / math.sqrt(2.0))) / 2.0
-
-
-def p_Y_leq_y(n, y):
-
-    # print(sum([prob_bin_n_p_k(n,0.5,i) for i in range(y+1)]))
-    # target_y = y
-    # f = lambda x: y_r_given_z_r(n, x)
-    # target_z = inverse_bisection(f, target_y, -15, 15)
-    # p = normal_cummulative_distribution_function(target_z)
-    # print(p)
-    # exit(1)
-
-
-
-    if n < 200:
-        return sum([prob_bin_n_p_k(n,0.5,i) for i in range(y+1)])
-    else:
-        target_y = y
-        f = lambda x: y_r_given_z_r(n, x)
-        target_z = inverse_bisection(f, target_y, -15, 15)
-        p = normal_cummulative_distribution_function(target_z)
-        p_std_lib = phi(target_z)
-        print(p, p_std_lib)
-        return p
 
 def prob_bin_n_p_k(n,p,k):
     p = Decimal(p)
@@ -94,12 +61,20 @@ def upper_bound_Y_hat_leq_y_hat(target_probability, n, k):
 
     res = 0
 
+    precomputed_prob_bin_n_p_k = dict()
+
     for v in range(0, n+1):
-        mul_1 = 1 - sum([prob_bin_n_p_k(n,target_probability,l) for l in range(0, v - k)])
+        # plt.plot(list(range(0,v-k)),[prob_bin_n_p_k(n,target_probability,l) for l in range(0, v - k)])
+        for l in range(0, v - k):
+            if (n, target_probability, l) not in precomputed_prob_bin_n_p_k:
+                precomputed_prob_bin_n_p_k[(n, target_probability, l)] = prob_bin_n_p_k(n, target_probability, l)
+        mul_1 = 1 - sum([precomputed_prob_bin_n_p_k[(n, target_probability, l)] for l in range(0, v - k)])
         mul_2 = prob_bin_n_p_k(n,0.5,v)
         #print("range:",(0,n+j-k+1))
         # print((mul_1,mul_2))
         res += mul_1 * mul_2
+    # plt.yscale("log")
+    # plt.show()
     return res
 
 
