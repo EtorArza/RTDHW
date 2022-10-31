@@ -178,4 +178,4 @@ if __name__ == "__main__":
     if len(sys.argv) != 5:
         usage()
         exit(0)
-    print(get_equivalent_runtime_from_probability(float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4])))
+    print('{:.8}'.format(get_equivalent_runtime_from_probability(float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]))))

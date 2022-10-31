@@ -134,4 +134,4 @@ if __name__ == "__main__":
     if len(sys.argv) != 4:
         usage()
         exit(0)
-    print(get_p_value(float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3])))
+    print('{:.8}'.format(get_p_value(float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]))))
