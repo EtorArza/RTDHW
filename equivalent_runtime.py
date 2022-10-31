@@ -156,7 +156,7 @@ def get_equivalent_runtime_from_probability(target_probability, s1, s2, t_1):
     if s1 > max_passmark or s2 > max_passmark:
         print("ERROR: Due to the fitting of the prediction of the runtime, machines with Passmark higher than", max_passmark, "are not compatible with the framework.")
 
-    return (max_passmark - s1) / (max_passmark - s2) * get_correction_coefficien_from_probability(target_probability) * t_1
+    return (max_passmark - s2) / (max_passmark - s1) * get_correction_coefficien_from_probability(target_probability) * t_1
 
 
 
