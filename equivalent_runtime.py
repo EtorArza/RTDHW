@@ -140,6 +140,9 @@ def get_equivalent_runtime_from_probability(target_probability, s1, s2, t_1):
 
     Parameters
     ----------
+    target_probability : float
+        The probability that an unfairly longer runtime is computed for machine 2.
+
     s1 : float
         The single thread PassMark CPU score of machine 1.
 
@@ -148,9 +151,6 @@ def get_equivalent_runtime_from_probability(target_probability, s1, s2, t_1):
 
     t1 : float
         The runtime in machine 1.
-
-    target_probability : float
-        The probability that an unfairly longer runtime is computed for machine 2.
     """
 
     if s1 > max_passmark or s2 > max_passmark:
