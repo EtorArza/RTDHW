@@ -23,6 +23,16 @@ cpu_passmark_single_thread_scores = {
     'i7_6700HQ_CPU_2_60GHz_bisk':1921,
 }
 
+cpu_passmark_single_thread_scores_servers = {
+    'AMD_EPYC_7B12': 2150,
+    'intel_xeon_at_2_2gh': 1383,
+    'Intel_xeon_E5_2680_v3_at_2_5gh': 1779,
+    'Intel_Xeon_Gold': 1840,
+}
+
+
+
+
 
 lines = []
 with open("linear_regression_calibration/result.txt", "r") as f:
@@ -35,6 +45,19 @@ with open("linear_regression_calibration/result.txt", "r") as f:
         lines.append(line)
 
 df = pd.DataFrame(lines, columns=columns)
+
+
+lines = []
+with open("linear_regression_calibration/result_servercpus.txt", "r") as f:
+    for line in f:
+        line = line.strip()
+        line = line.split("|")
+        line = line[0:5] + [int(line[5])] + [float(line[6])] + [int(line[7])] + [float(line[8])] + [
+            int(line[9])] + [float(line[10])] + [line[2].split("/")[-1] + "_" + line[4]] + [cpu_passmark_single_thread_scores_servers[line[0]]]
+
+        lines.append(line)
+
+df_server_cpus = pd.DataFrame(lines, columns=columns)
 
 
 ######################### REGRESION PLOT #########################
@@ -350,6 +373,7 @@ def fit_and_predict(training_df, x_test):
     poly1d_fn = np.poly1d(coef)
     return poly1d_fn(x_test)
 
+# plot regression
 x_vec = [cpu_passmark_single_thread_scores[item] for item in df['cpuname'].unique()]
 y_vec_norm = []
 
@@ -374,6 +398,33 @@ plt.ylabel(r"Runtime of $\rho'$, $t(M_j,\rho')$")
 plt.tight_layout()
 plt.savefig("figures/passmark_base_algorithm_regression.pdf")
 plt.close()
+
+
+# plot regression cpus
+
+x_vec_servers = [cpu_passmark_single_thread_scores_servers[item] for item in df_server_cpus['cpuname'].unique()]
+y_vec_norm_servers = []
+
+for cpuname in df_server_cpus['cpuname'].unique():
+    y_vec_norm_servers.append(df_server_cpus[df_server_cpus['cpuname'] == cpuname]['time'].sum())
+
+
+plt.plot(x_vec, y_vec_norm, 'rx',label="Personal Computers")
+plt.plot(x_vec_servers, y_vec_norm_servers, 'bo', label="Servers")
+plt.plot([min(x_vec)*0.6, max(x_vec)*1.1], fit_and_predict(df, [min(x_vec)*0.6, max(x_vec)
+                                                                * 1.1]), '--k', label=r"$t(s_j) = "+"{:.6f}".format(a)+r"s_j + "+"{:.4f}".format(b)+"$")
+
+
+plt.legend()
+plt.xlabel(r"Machine score, $s_j$")
+plt.ylabel(r"Runtime of $\rho'$, $t(M_j,\rho')$")
+
+plt.tight_layout()
+plt.savefig("figures/passmark_base_algorithm_regression_with_server_cpus.pdf")
+plt.close()
+
+
+
 ##### Leave same category out cross validation #####
 
 
