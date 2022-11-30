@@ -5,6 +5,10 @@ max_passmark = 3223.49
 
 assert len(correction_coefficients) == len(percentages_higher_than_predicted)
 
+def _check_passmark_not_too_high_or_low(s):
+    if not s < max_passmark:
+        print(f"Passmark should be lower than {max_passmark}, instead passmark of {s} was provided.")
+        exit(1)
 
 def _get_proportional_value(ref_array, return_values_array, ref_value):
     if ref_value > ref_array[0] or ref_value < ref_array[-1]:
@@ -98,8 +102,8 @@ def get_runtime_adjustment_proportion_from_probability(s1, s2, target_probabilit
         The probability that an unfairly longer runtime is computed for machine 2.
     """
 
-    if s1 > max_passmark or s2 > max_passmark:
-        print("ERROR: Due to the fitting of the prediction of the runtime, machines with Passmark higher than", max_passmark, "are not compatible with the framework.")
+    _check_passmark_not_too_high_or_low(s1)
+    _check_passmark_not_too_high_or_low(s2)
 
     return (max_passmark - s1) / (max_passmark - s2) * get_correction_coefficien_from_probability(target_probability)
 
@@ -153,8 +157,8 @@ def get_equivalent_runtime_from_probability(target_probability, s1, s2, t_1):
         The runtime in machine 1.
     """
 
-    if s1 > max_passmark or s2 > max_passmark:
-        print("ERROR: Due to the fitting of the prediction of the runtime, machines with Passmark higher than", max_passmark, "are not compatible with the framework.")
+    _check_passmark_not_too_high_or_low(s1)
+    _check_passmark_not_too_high_or_low(s2)
 
     return (max_passmark - s2) / (max_passmark - s1) * get_correction_coefficien_from_probability(target_probability) * t_1
 
