@@ -67,12 +67,13 @@ df_fit = pd.DataFrame(list_of_rows, columns=["cpuname", "passmark"] + tasks)
 
 df_test = pd.read_csv("verification_experiments/result.csv", header=None, names=["cpuname", "passmark", "time1", "time2", "time3", "time4"], )
 
-for kernel_size in [0.05, 0.001]:
+for kernel_size in [0.05, 0.0001]:
     for function, function_label in zip([lambda x: x, lambda x: np.abs(x)], ["", "abs"]):
         fig, ax = plt.subplots()
         fig_cum, ax_cum = plt.subplots()
         for df, label in zip([df_fit, df_test], ["Fit data", "Verification data"]):
-            proportions = []
+            proportions_equivalent_runtime = []
+            proportions_same_runtime = []
             for i in range(len(df)):
                 for j in range(len(df)):
                     if i < j:
@@ -93,26 +94,42 @@ for kernel_size in [0.05, 0.001]:
 
                         estimated_t2 = equivalent_runtime.get_equivalent_runtime_from_probability(0.5, s1, s2, t1)
 
-                        proportions.append(estimated_t2 / t2)
-            proportions =  function(np.log10(np.array(proportions)))
-            
-            kde = KernelDensity(kernel='tophat', bandwidth=kernel_size).fit(proportions.reshape(-1, 1))
+                        proportions_equivalent_runtime.append(estimated_t2 / t2)
+                        proportions_same_runtime.append(t1 / t2)
 
-            nslices = 1000
-
+            nslices = 100000
             x_plot = np.linspace(-1,1,nslices)
-            y_plot =  np.exp(kde.score_samples(x_plot.reshape(-1, 1)))
+
+            def get_y_plot_from_proportions(proportions, x_plot):
+                log_proportions =  function(np.log10(np.array(proportions)))
+                kde = KernelDensity(kernel='tophat', bandwidth=kernel_size).fit(log_proportions.reshape(-1, 1))
+                y_plot =  np.exp(kde.score_samples(x_plot.reshape(-1, 1)))
+                return y_plot
+
+
+            y_plot_equivalent_runtime = get_y_plot_from_proportions(proportions_equivalent_runtime, x_plot)
+            y_plot_same_runtime = get_y_plot_from_proportions(proportions_same_runtime, x_plot)
+
+
+            ax.plot(x_plot, y_plot_equivalent_runtime, label=label+" equivalent runtime")
             
+            if label == "Verification data":
+                ax.plot(x_plot, y_plot_same_runtime, label=label+" same runtime")
 
 
-            ax.plot(x_plot, y_plot, label=label)
-            y_plot = np.cumsum(y_plot) / (x_plot[2] -  x_plot[1]) / nslices 
-            ax_cum.plot(x_plot, y_plot, label=label)
+            # Uses trapezoid rule to get empirical distribution from tophat kde. Requires small tophat and a huge nslices.
+            def get_empirical(x_plot, y_plot):
+                return np.concatenate(([0],(np.cumsum(y_plot[1:-1]) + (y_plot[2:] + y_plot[0])/2) * (x_plot[2] -  x_plot[1]), [1]))
+
+            ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_equivalent_runtime), label=label+" equivalent runtime")
+            ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_same_runtime), label=label+" same runtime")
+
 
 
         ax.legend()
         fig.savefig(f"figures/verification_kde{function_label}_kernelsize_{kernel_size}.pdf")
 
+        ax_cum.set_xlim((-0.1, 1))
         ax_cum.legend()
         fig_cum.savefig(f"figures/verification_kde{function_label}_kernelsize_{kernel_size}_cumulative.pdf")
 
