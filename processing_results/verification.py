@@ -69,69 +69,78 @@ df_test = pd.read_csv("verification_experiments/result.csv", header=None, names=
 
 for kernel_size in [0.05, 0.0001]:
     for function, function_label in zip([lambda x: x, lambda x: np.abs(x)], ["", "abs"]):
-        fig, ax = plt.subplots()
-        fig_cum, ax_cum = plt.subplots()
-        for df, label in zip([df_fit, df_test], ["Fit data", "Verification data"]):
-            proportions_equivalent_runtime = []
-            proportions_same_runtime = []
-            for i in range(len(df)):
-                for j in range(len(df)):
-                    if i < j:
-                        continue
-                    s1 = df.iloc[i]["passmark"]
-                    s2 = df.iloc[j]["passmark"]
-
-                    print(f"$M_{i+1} \\rightarrow M_{j+1}$")
-                    print(df.iloc[i]["cpuname"], "->", df.iloc[j]["cpuname"])
-
-                    tasknames = list(df.columns)
-                    tasknames.remove('cpuname')
-                    tasknames.remove('passmark')
-
-                    for task in tasknames:    
-                        t1 = df.iloc[i][task]
-                        t2 = df.iloc[j][task]
-
-                        estimated_t2 = equivalent_runtime.get_equivalent_runtime_from_probability(0.5, s1, s2, t1)
-
-                        proportions_equivalent_runtime.append(estimated_t2 / t2)
-                        proportions_same_runtime.append(t1 / t2)
-
-            nslices = 100000
-            x_plot = np.linspace(-1,1,nslices)
-
-            def get_y_plot_from_proportions(proportions, x_plot):
-                log_proportions =  function(np.log10(np.array(proportions)))
-                kde = KernelDensity(kernel='tophat', bandwidth=kernel_size).fit(log_proportions.reshape(-1, 1))
-                y_plot =  np.exp(kde.score_samples(x_plot.reshape(-1, 1)))
-                return y_plot
+        for plot_index, figures_name in zip(range(3),("fitdata_eqivruntime_vs_runtime", "verification_eqivruntime_vs_runtime", "eqivruntime_fit_vs_verification")):
 
 
-            y_plot_equivalent_runtime = get_y_plot_from_proportions(proportions_equivalent_runtime, x_plot)
-            y_plot_same_runtime = get_y_plot_from_proportions(proportions_same_runtime, x_plot)
+            fig, ax = plt.subplots()
+            fig_cum, ax_cum = plt.subplots()
+            for df, label, data_name in zip([df_fit, df_test], ["Fit data", "Verification data"], ["fitdata", "equivruntime"]):
+                proportions_equivalent_runtime = []
+                proportions_same_runtime = []
+                for i in range(len(df)):
+                    for j in range(len(df)):
+                        if i < j:
+                            continue
+                        s1 = df.iloc[i]["passmark"]
+                        s2 = df.iloc[j]["passmark"]
+
+                        print(f"$M_{i+1} \\rightarrow M_{j+1}$")
+                        print(df.iloc[i]["cpuname"], "->", df.iloc[j]["cpuname"])
+
+                        tasknames = list(df.columns)
+                        tasknames.remove('cpuname')
+                        tasknames.remove('passmark')
+
+                        for task in tasknames:    
+                            t1 = df.iloc[i][task]
+                            t2 = df.iloc[j][task]
+
+                            estimated_t2 = equivalent_runtime.get_equivalent_runtime_from_probability(0.5, s1, s2, t1)
+
+                            proportions_equivalent_runtime.append(estimated_t2 / t2)
+                            proportions_same_runtime.append(t1 / t2)
+
+                nslices = 100000
+                x_plot = np.linspace(-1,1,nslices)
+
+                def get_y_plot_from_proportions(proportions, x_plot):
+                    log_proportions =  function(np.log10(np.array(proportions)))
+                    kde = KernelDensity(kernel='tophat', bandwidth=kernel_size).fit(log_proportions.reshape(-1, 1))
+                    y_plot =  np.exp(kde.score_samples(x_plot.reshape(-1, 1)))
+                    return y_plot
 
 
-            ax.plot(x_plot, y_plot_equivalent_runtime, label=label+" equivalent runtime")
-            
-            if label == "Verification data":
-                ax.plot(x_plot, y_plot_same_runtime, label=label+" same runtime")
-
-
-            # Uses trapezoid rule to get empirical distribution from tophat kde. Requires small tophat and a huge nslices.
-            def get_empirical(x_plot, y_plot):
-                return np.concatenate(([0],(np.cumsum(y_plot[1:-1]) + (y_plot[2:] + y_plot[0])/2) * (x_plot[2] -  x_plot[1]), [1]))
-
-            ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_equivalent_runtime), label=label+" equivalent runtime")
-            ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_same_runtime), label=label+" same runtime")
+                y_plot_equivalent_runtime = get_y_plot_from_proportions(proportions_equivalent_runtime, x_plot)
+                y_plot_same_runtime = get_y_plot_from_proportions(proportions_same_runtime, x_plot)
 
 
 
-        ax.legend()
-        fig.savefig(f"figures/verification_kde{function_label}_kernelsize_{kernel_size}.pdf")
 
-        ax_cum.set_xlim((-0.1, 1))
-        ax_cum.legend()
-        fig_cum.savefig(f"figures/verification_kde{function_label}_kernelsize_{kernel_size}_cumulative.pdf")
+                # Uses trapezoid rule to get empirical distribution from tophat kde. Requires small tophat and a huge nslices.
+                def get_empirical(x_plot, y_plot):
+                    return np.concatenate(([0],(np.cumsum(y_plot[1:-1]) + (y_plot[2:] + y_plot[0])/2) * (x_plot[2] -  x_plot[1]), [1]))
+
+
+                if data_name in figures_name:
+                    ax.plot(x_plot, y_plot_equivalent_runtime, label=label+" equivalent runtime")                
+                    ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_equivalent_runtime), label=label+" equivalent runtime")
+
+                    if "runtime" in figures_name:
+                        ax.plot(x_plot, y_plot_same_runtime, label=label+" same runtime")
+                        ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_same_runtime), label=label+" same runtime")
+
+
+
+
+
+
+            ax.legend()
+            fig.savefig(f"figures/verif_{figures_name}_kde{function_label}_kernelsize_{kernel_size}.pdf")
+
+            ax_cum.set_xlim((-0.1, 1))
+            ax_cum.legend()
+            if function_label == "abs":
+                fig_cum.savefig(f"figures/verif_{figures_name}_cumulative_kernelsize_{kernel_size}_.pdf")
 
 
 
