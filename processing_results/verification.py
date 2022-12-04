@@ -7,6 +7,62 @@ from sklearn.neighbors import KernelDensity
 from matplotlib import pyplot as plt
 
 
+
+
+
+
+# plot goodies from # https://stackoverflow.com/questions/7358118/matplotlib-black-white-colormap-with-dashes-dots-etc
+
+def setAxLinesBW(ax):
+    """
+    Take each Line2D in the axes, ax, and convert the line style to be 
+    suitable for black and white viewing.
+    """
+    MARKERSIZE = 3
+
+    COLORMAP = {
+        '#1f77b4': {'marker': None, 'dash': [5,3]},
+        '#ff7f0e': {'marker': None, 'dash': (None,None)},
+        '#2ca02c': {'marker': None, 'dash': [5,3,1,3]},
+        '#d62728': {'marker': None, 'dash': [1,3]},
+        '#9467bd': {'marker': None, 'dash': [5,2,5,2,5,10]},
+        '#8c564b': {'marker': None, 'dash': [5,3,1,2,1,10]},
+        '#e377c2': {'marker': 'o', 'dash': (None,None)} #[1,2,1,10]}
+        }
+
+
+    lines_to_adjust = ax.get_lines()
+    try:
+        lines_to_adjust += ax.get_legend().get_lines()
+    except AttributeError:
+        pass
+
+    print("Adjusting colors: ")
+    for line in lines_to_adjust:
+        origColor = line.get_color()
+        print(origColor)
+        # line.set_color('black') # Uncomment for b&w figure
+        line.set_dashes(COLORMAP[origColor]['dash'])
+        line.set_marker(COLORMAP[origColor]['marker'])
+        line.set_markersize(MARKERSIZE)
+
+def setFigLinesBW(fig):
+    """
+    Take each axes in the figure, and for each line in the axes, make the
+    line viewable in black and white.
+    """
+    for ax in fig.get_axes():
+        setAxLinesBW(ax)
+
+
+
+
+
+
+
+
+
+
 # Read original data
 
 columns = ["cpuname", "problemtype", "problempath", "methodname", "operatorname", "nevals",
@@ -67,25 +123,27 @@ df_fit = pd.DataFrame(list_of_rows, columns=["cpuname", "passmark"] + tasks)
 
 df_test = pd.read_csv("verification_experiments/result.csv", header=None, names=["cpuname", "passmark", "time1", "time2", "time3", "time4"], )
 
-for kernel_size in [0.05, 0.0001]:
+for kernel_size in [0.1, 0.0001]:
     for function, function_label in zip([lambda x: x, lambda x: np.abs(x)], ["", "abs"]):
-        for plot_index, figures_name in zip(range(3),("fitdata_eqivruntime_vs_runtime", "verification_eqivruntime_vs_runtime", "eqivruntime_fit_vs_verification")):
+        for plot_index, figures_name in zip(range(3),("fitdata_equiv_vs_runtime", "verification_equiv_vs_runtime", "equiv_fitdata_vs_verification")):
 
 
             fig, ax = plt.subplots()
             fig_cum, ax_cum = plt.subplots()
-            for df, label, data_name in zip([df_fit, df_test], ["Fit data", "Verification data"], ["fitdata", "equivruntime"]):
+            for df, label, data_name in zip([df_fit, df_test], ["Fit data", "Verification data"], ["fitdata", "verification"]):
                 proportions_equivalent_runtime = []
                 proportions_same_runtime = []
                 for i in range(len(df)):
                     for j in range(len(df)):
-                        if i < j:
+
+                        if df.iloc[i]["cpuname"] == df.iloc[j]["cpuname"]:
                             continue
+
                         s1 = df.iloc[i]["passmark"]
                         s2 = df.iloc[j]["passmark"]
 
-                        print(f"$M_{i+1} \\rightarrow M_{j+1}$")
-                        print(df.iloc[i]["cpuname"], "->", df.iloc[j]["cpuname"])
+                        # print(f"$M_{i+1} \\rightarrow M_{j+1}$")
+                        # print(df.iloc[i]["cpuname"], "->", df.iloc[j]["cpuname"])
 
                         tasknames = list(df.columns)
                         tasknames.remove('cpuname')
@@ -100,11 +158,12 @@ for kernel_size in [0.05, 0.0001]:
                             proportions_equivalent_runtime.append(estimated_t2 / t2)
                             proportions_same_runtime.append(t1 / t2)
 
+                x_min, x_max = (-2,2)
                 nslices = 100000
-                x_plot = np.linspace(-1,1,nslices)
+                x_plot = np.linspace(x_min,x_max,nslices)
 
                 def get_y_plot_from_proportions(proportions, x_plot):
-                    log_proportions =  function(np.log10(np.array(proportions)))
+                    log_proportions =  function(np.log2(np.array(proportions)))
                     kde = KernelDensity(kernel='tophat', bandwidth=kernel_size).fit(log_proportions.reshape(-1, 1))
                     y_plot =  np.exp(kde.score_samples(x_plot.reshape(-1, 1)))
                     return y_plot
@@ -122,25 +181,41 @@ for kernel_size in [0.05, 0.0001]:
 
 
                 if data_name in figures_name:
-                    ax.plot(x_plot, y_plot_equivalent_runtime, label=label+" equivalent runtime")                
-                    ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_equivalent_runtime), label=label+" equivalent runtime")
 
                     if "runtime" in figures_name:
-                        ax.plot(x_plot, y_plot_same_runtime, label=label+" same runtime")
-                        ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_same_runtime), label=label+" same runtime")
+                        ax.plot(x_plot, y_plot_same_runtime, label="No runtime adjustment")
+                        ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_same_runtime), label="No runtime adjustment")
+
+
+                        ax.plot(x_plot, y_plot_equivalent_runtime, label="Equivalent runtime")
+                        ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_equivalent_runtime), label="Equivalent runtime")
+
+                    else:
+                        ax.plot(x_plot, y_plot_equivalent_runtime, label=label)
+                        ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_equivalent_runtime), label=label)
 
 
 
 
 
+            fig_path_prefix = f"figures/verif_{plot_index}_{figures_name}_"
+
+            setAxLinesBW(ax)
+            setAxLinesBW(ax_cum)
 
             ax.legend()
-            fig.savefig(f"figures/verif_{figures_name}_kde{function_label}_kernelsize_{kernel_size}.pdf")
+            if "abs" not in function_label:
+                fig.savefig(fig_path_prefix + f"kde{function_label}_kernelsize_{kernel_size}.pdf")
 
-            ax_cum.set_xlim((-0.1, 1))
             ax_cum.legend()
-            if function_label == "abs":
-                fig_cum.savefig(f"figures/verif_{figures_name}_cumulative_kernelsize_{kernel_size}_.pdf")
+            ax_cum.set_xlim((-0.1, x_max))
+            ax_cum.set_xlabel(r"Log$_2$ deviation ratio")
+            ax_cum.set_ylabel("Cumulative probability")
+            if function_label == "abs" and kernel_size < 0.01:
+                fig_cum.savefig(fig_path_prefix + f"cumulative_kernelsize_{kernel_size}_.pdf")
+
+            plt.close(fig)
+            plt.close(fig_cum)
 
 
 
