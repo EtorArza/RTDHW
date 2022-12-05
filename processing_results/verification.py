@@ -128,8 +128,8 @@ for kernel_size in [0.1, 0.0001]:
         for plot_index, figures_name in zip(range(3),("fitdata_equiv_vs_runtime", "verification_equiv_vs_runtime", "equiv_fitdata_vs_verification")):
 
 
-            fig, ax = plt.subplots()
-            fig_cum, ax_cum = plt.subplots()
+            fig, ax = plt.subplots(figsize=(4, 3))
+            fig_cum, ax_cum = plt.subplots(figsize=(4, 3))
             for df, label, data_name in zip([df_fit, df_test], ["Train", "Validation"], ["fitdata", "verification"]):
                 proportions_equivalent_runtime = []
                 proportions_same_runtime = []
@@ -207,6 +207,7 @@ for kernel_size in [0.1, 0.0001]:
             setAxLinesBW(ax_cum)
 
             ax.legend()
+            fig.tight_layout()
             if "abs" not in function_label:
                 fig.savefig(fig_path_prefix + f"kde{function_label}_kernelsize_{kernel_size}.pdf")
 
@@ -214,6 +215,8 @@ for kernel_size in [0.1, 0.0001]:
             ax_cum.set_xlim((-0.1, x_max))
             ax_cum.set_xlabel(r"Log$_2$ deviation ratio")
             ax_cum.set_ylabel("Cumulative probability")
+            fig_cum.tight_layout()
+
             if function_label == "abs" and kernel_size < 0.01:
                 fig_cum.savefig(fig_path_prefix + f"cumulative_kernelsize_{kernel_size}_.pdf")
 

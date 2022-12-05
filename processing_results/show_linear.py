@@ -385,12 +385,12 @@ res = fit_and_predict(df, [0, 1])
 
 b = res[0]
 a = res[1] - b
-
+plt.figure(figsize=(4,3))
 plt.plot(x_vec, y_vec_norm, 'rx')
 plt.plot([min(x_vec)*0.6, max(x_vec)*1.1], fit_and_predict(df, [min(x_vec)*0.6, max(x_vec)
-                                                                * 1.1]), '--k', label=r"$t(s_j) = "+"{:.6f}".format(a)+r"s_j + "+"{:.4f}".format(b)+"$")
+                                                                * 1.1]), '--k', label=r"$t(s_j) = "+"{:.5f}".format(a)+r"s_j + "+"{:.3f}".format(b)+"$")
 
-
+plt.ylim((500, 2200))
 plt.legend()
 plt.xlabel(r"Machine score, $s_j$")
 plt.ylabel(r"Runtime of $\rho'$, $t(M_j,\rho')$")
@@ -408,13 +408,13 @@ y_vec_norm_servers = []
 for cpuname in df_server_cpus['cpuname'].unique():
     y_vec_norm_servers.append(df_server_cpus[df_server_cpus['cpuname'] == cpuname]['time'].sum())
 
-
+plt.figure(figsize=(5,3))
 plt.plot(x_vec, y_vec_norm, 'rx',label="Personal Computers")
 plt.plot(x_vec_servers, y_vec_norm_servers, 'bo', label="Servers")
 plt.plot([min(x_vec)*0.6, max(x_vec)*1.1], fit_and_predict(df, [min(x_vec)*0.6, max(x_vec)
-                                                                * 1.1]), '--k', label=r"$t(s_j) = "+"{:.6f}".format(a)+r"s_j + "+"{:.4f}".format(b)+"$")
+                                                                * 1.1]), '--k', label=r"$t(s_j) = "+"{:.5f}".format(a)+r"s_j + "+"{:.3f}".format(b)+"$")
 
-
+plt.ylim((500, 2200))
 plt.legend()
 plt.xlabel(r"Machine score, $s_j$")
 plt.ylabel(r"Runtime of $\rho'$, $t(M_j,\rho')$")
@@ -540,6 +540,7 @@ print("correction_coefficients = [", ",".join([str(el) for el in CORRECTION_COEF
 print("percentages_higher_than_predicted = [", ",".join([str(el) for el in perc_cases_pred_higher_list]), "]", sep="")
 print("max_passmark =", b/a)
 
+plt.figure(figsize=(4,3))
 plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_higher_list,
          label=r"$P(\hat{t}_2 > t_2)$", linestyle="-")
 # plt.plot(CORRECTION_COEFFICIENTS, pred_time_in_average_this_percent_lower_than_actual_list,
@@ -550,7 +551,7 @@ plt.plot(CORRECTION_COEFFICIENTS, perc_cases_pred_higher_list,
 
 # plt.legend()
 plt.ylabel(r"$p_{\gamma} = P(\hat{t}_2 > t_2)$")
-plt.xlabel("correction parameter  $\gamma = \mathbb{E}[\dfrac{\hat{t}_2}{t_2}]$")
+plt.xlabel("$\gamma$")
 plt.ylim((0, 1.05))
 plt.tight_layout()
 plt.savefig("figures/correction_coefficient_tradeoff.pdf")

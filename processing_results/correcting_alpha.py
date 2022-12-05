@@ -138,6 +138,7 @@ for y in tqdm(x):
     p_values.append(p_Y_leq_y(n, y))
     corrected_p_values.append(upper_bound_Y_hat_leq_y_hat(n, y))
 
+plt.figure(figsize=(4,3))
 plt.plot(x, p_values, label="$p(k)$")
 plt.plot(x, corrected_p_values, label=r"$\hat{p}_c(k)$")
 plt.yscale("logit")
@@ -148,7 +149,7 @@ plt.ylabel("p-value")
 plt.legend()
 plt.tight_layout()
 
-plt.savefig("../paper/images/alpha_vs_corrected_alpha.pdf")
+plt.savefig("figures/alpha_vs_corrected_alpha.pdf")
 
 exit(0)
 
