@@ -130,7 +130,7 @@ for kernel_size in [0.1, 0.0001]:
 
             fig, ax = plt.subplots()
             fig_cum, ax_cum = plt.subplots()
-            for df, label, data_name in zip([df_fit, df_test], ["Fit data", "Verification data"], ["fitdata", "verification"]):
+            for df, label, data_name in zip([df_fit, df_test], ["Train", "Validation"], ["fitdata", "verification"]):
                 proportions_equivalent_runtime = []
                 proportions_same_runtime = []
                 for i in range(len(df)):
@@ -183,12 +183,15 @@ for kernel_size in [0.1, 0.0001]:
                 if data_name in figures_name:
 
                     if "runtime" in figures_name:
-                        ax.plot(x_plot, y_plot_same_runtime, label="No runtime adjustment")
-                        ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_same_runtime), label="No runtime adjustment")
-
 
                         ax.plot(x_plot, y_plot_equivalent_runtime, label="Equivalent runtime")
                         ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_equivalent_runtime), label="Equivalent runtime")
+
+                        ax.plot(x_plot, y_plot_same_runtime, label="Same runtime")
+                        ax_cum.plot(x_plot, get_empirical(x_plot, y_plot_same_runtime), label="Same runtime")
+
+
+
 
                     else:
                         ax.plot(x_plot, y_plot_equivalent_runtime, label=label)
