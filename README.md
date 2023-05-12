@@ -11,6 +11,7 @@ In this example, we will compare a simple random initialization local search pro
 Using the proposed methodology, we will statistically asses the difference in performance between these two algorithms, without having to actually execute the code of the memetic algorithm.
 In this case, the memetic search algorithm is algorithm A, because this is the algorithm that is not executed and the local search algorithm is algorithm B, because this is the algorithm whose runtime is predicted.
 For this experiment, we choose a probability of predicting a longer than true equivalent runtime of p<sub>𝛾</sub> = 0.01.
+To generate an unbiased prediction, simply consider p<sub>𝛾</sub> = 0.5.
 
 __Step 1: Obtaining the data__
 
