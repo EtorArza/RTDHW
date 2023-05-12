@@ -139,8 +139,8 @@ for y in tqdm(x):
     corrected_p_values.append(upper_bound_Y_hat_leq_y_hat(n, y))
 
 plt.figure(figsize=(4,3))
-plt.plot(x, p_values, label="$p(k)$")
-plt.plot(x, corrected_p_values, label=r"$\hat{p}_c(k)$")
+plt.plot(x, p_values, label="$p(k)$", linestyle="--")
+plt.plot(x, corrected_p_values, label=r"$\hat{p}_c(k)$", linestyle="-")
 plt.yscale("logit")
 
 plt.xlabel("Value of statistic, k")
