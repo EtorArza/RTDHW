@@ -9,7 +9,8 @@ Lets say we want to compare existing results of algorithm A executed in machine 
 
 Requirements:
 - All the experiments are assumed to be executed in the CPU in single thread (no parallelization).
-- The CPU scores of both machines, which can be looked up in the file [cpu_scores.md](https://github.com/EtorArza/RTDHW/blob/master/cpu_scores.md). 
+- The CPU scores of both machines, which can be looked up in the file [cpu_scores.md](https://github.com/EtorArza/RTDHW/blob/master/cpu_scores.md). It is important to use the scores from this file, as the PassMark scores change all the time, and the regression was fitted with these specific values.
+
 
 To calculate the equivalent runtime for algorithm B in machine M<sub>2</sub>, we run:
 
