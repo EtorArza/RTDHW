@@ -1,9 +1,48 @@
 ## RunTime in Different HardWare (RTDHW)
 This is the repo of the paper _On the fair comparison of optimization algorithms in different machines._ 
-In this paper, we introduce a methodology to statistically asses the difference between the performance of two optimization algorithms executed in different machines.
-The optimization problem is assumed to be a <ins>minimization</ins> problem, and all the experiments are assumed to be executed in single thread (no parallelization).
+In this paper, we introduce a methodology to asses the difference in performance of two optimization algorithms, when executed in different machines.
+
+
+#### Quick start (equivalent runtime)
+
+Lets say we want to compare existing results of algorithm A executed in machine M<sub>1</sub> for time t₁ with another algorithm B. However, we cannot execute B in machine M<sub>1</sub>, instead, we need to execute it in machine M<sub>2</sub> which might be faster or slower than machine M<sub>1</sub>. To address this, we can adjust the runtime of algorithm B in machine M<sub>2</sub>, such that the comparison is fair.
+
+Requirements:
+- All the experiments are assumed to be executed in the CPU in single thread (no parallelization).
+- The CPU scores of both machines, which can be looked up in the file [cpu_scores.md](https://github.com/EtorArza/RTDHW/blob/master/cpu_scores.md). 
+
+To calculate the equivalent runtime for algorithm B in machine M<sub>2</sub>, we run:
+
+
+```
+python3 equivalent_runtime.py 0.5 s₁ s₂ t₁
+```
+
+where s₁ s₂ are the CPU scores ([cpu_scores.md](https://github.com/EtorArza/RTDHW/blob/master/cpu_scores.md)) of M<sub>1</sub> and M<sub>2</sub> respectively, and t₁ is the execution time of A in machine M<sub>1</sub>.
+
+So for example, if the machine scores of M<sub>1</sub> is 1219, the machine score of M<sub>2</sub> is 1012 and the runtime in M<sub>1</sub> was 10.0 seconds, then:
+
+
+```
+python3 equivalent_runtime.py 0.5 1219 1012 10.0
+>> 11.032682
+```
+
+Notice how in this case, the equivalent runtime for machine M<sub>2</sub> of 11.03 is higher than the original runtime of 10.0. This is because  M<sub>2</sub> is slower (lower CPU score) than machine M<sub>1</sub>, and hence, a longer runtime for executinos in M<sub>2</sub> is required to make the comparison fair.
+
+
+-------------------------------------------------------------------------------------------------------------------------
+
+
+### Sign test for algorithm comparison when executed in different CPUs
+
+In the following, we show two examples on how to statistically compare the performance of two algorithms, while considering results from different machines.
+This is more complex than the quick start guide, because we make more conservative predictions of the equivalent runtime, coupled with a corrected one sided sign test.
+If the corrected sign test is not used, then disregard these two examples and use the equivalent runtime as in the quick start guide.
+From now on, the optimization problem is assumed to be a <ins>minimization</ins> problem.
 In the following, we present two examples of how this methodology can be applied.
- 
+
+
 ### Example I
 
 
