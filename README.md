@@ -20,7 +20,7 @@ python3 equivalent_runtime.py 0.5 s₁ s₂ t₁
 
 where s₁ s₂ are the CPU scores ([cpu_scores.md](https://github.com/EtorArza/RTDHW/blob/master/cpu_scores.md)) of M<sub>1</sub> and M<sub>2</sub> respectively, and t₁ is the execution time of A in machine M<sub>1</sub>.
 
-So for example, if the machine scores of M<sub>1</sub> is 1219, the machine score of M<sub>2</sub> is 1012 and the runtime in M<sub>1</sub> was 10.0 seconds, then:
+So for example, if the machine score of M<sub>1</sub> is 1219, the machine score of M<sub>2</sub> is 1012 and the runtime in M<sub>1</sub> was 10.0 seconds, then:
 
 
 ```
