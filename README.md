@@ -283,6 +283,23 @@ If we had considered the original runtimes t<sub>1</sub> as the stopping criteri
 In that case, H<sub>0</sub> might not have been rejected.
 
 
+### Citation
+
+If you use the methodology in your paper, you could consider a citation:
+
+```
+@article{arzaFairComparisonOptimization2024,
+  title = {On the {{Fair Comparison}} of {{Optimization Algorithms}} in {{Different Machines}}},
+  author = {Arza, Etor and Ceberio, Josu and Irurozki, Ekhi{\~n}e and P{\'e}rez, Aritz},
+  year = {2024},
+  month = mar,
+  journal = {Annals of Applied Statistics},
+  volume = {18},
+  number = {1},
+  issn = {1932-6157},
+  doi = {10.1214/23-AOAS1778}
+}
+```
 
 
 ### References
