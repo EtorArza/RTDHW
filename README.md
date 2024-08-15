@@ -1,9 +1,8 @@
 ## RunTime in Different HardWare (RTDHW)
-This is the repo of the paper _On the fair comparison of optimization algorithms in different machines._ 
+This is the repo of the paper ["On the Fair Comparison of Optimization Algorithms in Different Machines"](    
+https://doi.org/10.48550/arXiv.2305.07345). 
 In this paper, we introduce a methodology to asses the difference in performance of two optimization algorithms, when executed in different machines.
 
-
-#### Quick start (equivalent runtime)
 
 Lets say we want to compare existing results of algorithm A executed in machine M<sub>1</sub> for time t₁ with another algorithm B. However, we cannot execute B in machine M<sub>1</sub>, instead, we need to execute it in machine M<sub>2</sub> which might be faster or slower than machine M<sub>1</sub>. To address this, we can adjust the runtime of algorithm B in machine M<sub>2</sub>, such that the comparison is fair.
 
